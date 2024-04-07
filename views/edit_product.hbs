@@ -1,0 +1,121 @@
+{{>adminSideBar}}
+
+<div class="container-fluid px-5 my-3">
+    <h3 class="font-weight-bold mb-4">Edit Product</h3>
+    <div class="row ">
+        <div class="col-12 col-md-6 border border-dark  rounded p-3" id="form-col">
+            <h6 class="mb-3 font-weight-bold">General Information</h6>
+
+            <form action="" method="post" id="add-product-form">
+                <div class="form-group">
+                    <label class="text-sample">Product Name</label>
+                    <input class="rounded border border-secondary" id="product-name" type="text"
+                        placeholder="Type product name here" {{#if product}}value="{{product.name}}" {{/if}}>
+                    <p class="text-sample3 text-danger p-0" id="proNameError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Product Category</label>
+                    <select name="category" id="category"
+                        class="rounded border border-secondary cursor-pointer text-sample p-1">
+                        <option value="{{product.category._id}}" selected hidden>{{product.category.name}}
+                        </option>
+                        {{#each categories}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                    <p class="text-sample3 text-danger p-0" id="categoryError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Regular price</label>
+                    <input class="rounded border border-secondary" id="regular-price" type="number"
+                        placeholder="Enter regular price" {{#if product}}value="{{product.regularPrice}}" {{/if}}>
+                    <p class="text-sample3 text-danger p-0" id="regPriceError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample ">Your selling price</label>
+                    <input class="rounded border border-secondary" id="selling-price" type="number"
+                        placeholder="Enter your selling price" {{#if product}}value="{{product.price}}" {{/if}}>
+                    <p class="text-sample3 text-danger p-0" id="sellingPriceError"></p>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="discount-set">
+                                <label class="text-sample font-weight-bold">Discount Amount:</label>
+                                <div class="input-group">
+                                    <input class="form-control rounded border border-secondary" id="dis-amount-input"
+                                        type="number" placeholder="Enter discount amount" {{#if
+                                        product}}value="{{product.discount}}" {{/if}}>
+                                </div>
+                                <p class="text-sample3 text-danger p-0" id="disError"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="discount-set">
+                                <label class="text-sample font-weight-bold">Discount:</label>
+                                <div class="input-group">
+                                    <input class="form-control rounded border border-secondary" id="dis-%-input"
+                                        type="number" placeholder="Enter discount %">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <p class="text-sample3 text-danger p-0" id="disPerceError"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample font-weight-bold">Stock</label>
+                    <div class="input-group">
+                        <input class="form-control rounded border border-secondary" id="stock" type="number"
+                            placeholder="Enter stock" {{#if product}}value="{{product.stock}}" {{/if}}>
+                    </div>
+                    <p class="text-sample3 text-danger p-0" id="stockError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Description</label>
+                    <textarea class="form-control border border-secondary text-sample3y " id="description"
+                        rows="3">{{#if product}}{{product.description}}{{/if}}</textarea>
+                    <p class="text-sample3 text-danger p-0" id="descriptionError"></p>
+                </div>
+                <div class="form-group mb-0">
+                    {{!-- this input field using for indicate the form data for edit , then set form action based on
+                    that --}}
+                    <input type="hidden" id="formAction" name="formAction" value="edit"
+                        data-product-id="{{product._id}}">
+                    <input type="submit" value="SAVE PRODUCT DETAILS" class="btn border-0 font-weight-bold">
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-6 p-3">
+            <div class="">
+                <h6 class="mb-3 font-weight-bold">Images</h6>
+                <form id="uploadForm">
+                    <label class="custom-file-upload" for="imageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i> <span class="text-sample">Upload Images</span>
+                    </label>
+                    <input class="d-none is-invalid" type="file" id="imageUpload" name="images" accept="image/*"
+                        multiple>
+                    <p class="text-sample3 text-danger p-0 " id="imageUploadError"></p>
+                </form>
+                <div id="imagePreviews" class="image-previews-container">
+                    <div class="row" id="imagePreviewRow">
+                        <!-- Image preview containers will be dynamically added here up to 5-->
+                        {{#each product.images}}
+                        <div class="col-md-6">
+                            <i class="fa-solid fa-circle-xmark delete-icon" style="color: #e20001;" title="Cancel"
+                                data-img-id="{{@index}}"></i>
+                            <div class="image-preview d-flex justify-content-center align-items-center" title="">
+                                <img src="{{this}}" alt="preview-img" style="max-width: 100%; max-height:100%">
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- this input filed using for getting product _id --}}
+<input type="text" id="product_id" hidden value="{{product._id}}">

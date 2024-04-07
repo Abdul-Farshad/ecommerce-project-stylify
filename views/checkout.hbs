@@ -1,0 +1,172 @@
+{{>userNavbar}}
+<div class="container py-3">
+    {{!-- {{#if cartItems.length}} --}}
+    <section class="content-section">
+        <h3 class="font-weight-bold mb-3">Billing Information</h3>
+        <div class="row">
+            <div class="col-12 col-md-9 scrollable-column">
+                <form id="billing-info-form" name="billing-info-form">
+                    <label class="font-weight-bold">Select a delivery address</label>
+                    <p class="text-sample text-danger d-none" id="addressError"><i
+                            class="fa-solid fa-circle-exclamation fa-sm mr-1" style="color: #c80000;"></i>please select
+                        a delivery address</p>
+                    <div id="address-display" style="max-height: 420px;">
+                        {{#if address}}
+                        {{#each address}}
+                        <div class="address-container">
+                            <div class="d-flex align-items-start">
+                                <input type="radio" name="address" value="{{this._id}}"
+                                    class="cursor-pointer mr-3 my-1">
+                                <div>
+                                    <p><strong>{{this.name}}</strong></p>
+                                    <p>{{this.city}},{{this.state}} {{this.PINCode}}</p>
+                                    <p>{{this.country}}</p>
+                                    <p>Mobile number: {{this.mobile}}</p>
+                                    <p>{{#if this.landmark}}{{this.landmark}}{{/if}}</p>
+                                    <p>Area or Street: {{this.address}}</p>
+                                </div>
+                            </div>
+                            <div class="address-actions">
+                                <span><a href="/account/manage_address/edit_address/{{this._id}}"
+                                        class="text-sample">Edit Address</a></span>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                        {{else}}
+                        <div class=" container text-center">
+                            <p class="mt-5 text-center">No address found... <a
+                                    href="/account/manage_address/add_address">Add new one</a></p>
+                        </div>
+                        {{/if}}
+                    </div>
+                    <div class="my-4">
+                        <label for="paymentOption" class="font-weight-bold">Payment Options</label>
+                        <hr>
+
+                        {{!-- COD un available message --}}
+                        <div class="text-sample d-none" id="COD-disabled-msg">
+                            <i class="fa-solid fa-circle-info" style="color: #C9971C;"></i>
+                            <p class="m-0">Cash on delivery not available for orders above Rs 1000</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-sm-6 col-md-3 ">
+                                <span id="COD-option-container"
+                                    class="payment-option border p-3 m-2 d-flex  flex-column justify-content-center align-items-center">
+                                    <img src="/images/cash-hand-icon.svg" alt="">
+                                    <p class="text-sample">Cash on Delivery</p>
+                                    <input type="radio" id="COD-option" name="payment" value="Cash on Delivery"
+                                        class="cursor-pointer">
+                                </span>
+                            </div>
+                            <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+                                <span
+                                    class="payment-option border p-3 m-2 d-flex  flex-column justify-content-center align-items-center">
+                                    <img src="/images/razorpay.svg" alt="" style="max-width:60%">
+                                    <p class="text-sample">Razorpay</p>
+                                    <input type="radio" name="payment" value="rzp" class="cursor-pointer">
+                                </span>
+                            </div>
+                        </div>
+                        <p class="text-sample text-danger d-none" id="paymentOptionError"><i
+                                class="fa-solid fa-circle-exclamation fa-sm mr-1" style="color: #c80000;"></i>please
+                            select a payment option</p>
+                    </div>
+                    <input type="hidden" id="userData" value="{{userData}}">
+                </form>
+            </div>
+
+            <div class="col-12 col-md-3 fixed-column">
+                <div class="cart-summery">
+                    <h5>Order Summary</h5>
+                    <hr>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Subtotal</div>
+                        <div class="col-6 text-right" id="cart-subtotal"><i class="bx bx-rupee bx-xs"></i>{{subtotal}}
+                        </div>
+                    </div>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Shipping</div>
+                        <div class="col-6 text-right" id="shipping-charge">
+                            {{#eq shippingCharge 0}}
+                            Free
+                            {{else}}
+                            <i class="bx bx-rupee bx-xs"></i>{{shippingCharge}}
+                            {{/eq}}
+                        </div>
+                    </div>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Discount</div>
+                        <div class="col-6 text-right" id="cart-discount">-<i class="bx bx-rupee bx-xs"></i>{{discount}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row cart-summery-list">
+                        <div class="col-6"><strong>Total</strong></div>
+                        <div class="col-6 text-right font-weight-bold" id="cart-total"><strong><i
+                                    class="bx bx-rupee bx-xs"></i>{{total}}</strong></div>
+                    </div>
+                    {{#unless appliedCoupon}}
+                    <div class="coupon-section">
+                        <div class="d-flex justify-content-center" id="available-coupon-btn">
+                            <button class="px-2 d-flex justify-content-between align-items-center d-none"
+                                id="coupon-btn">
+                                <span>Available Coupons</span>
+                                <i class="bx bx-chevron-down ml-auto"></i></button>
+                        </div>
+                        <div class="coupon-container" id="coupon-container">
+                            {{!-- adding coupons from index.js file --}}
+                            <ul id="coupon-list"></ul>
+                        </div>
+                    </div>
+                    <div class="selected-coupon-container d-none">
+                        <p class="text-sample3 m-0">Applied coupon</p>
+                        <p id="selected-coupon" class="mb-0 p-1 border border-secondary rounded"></p>
+                        <i class="fa-solid fa-xmark" id="remove-coupon" onclick="removeCoupon()"></i>
+                    </div>
+                    {{/unless}}
+                    {{#if appliedCoupon}}
+                    <div class="selected-coupon-container">
+                        <p class="text-sample3 m-0">Applied coupon</p>
+                        <p id="selected-coupon" class="mb-0 p-1 border border-secondary rounded">{{appliedCoupon}}</p>
+                    </div>
+                    {{/if}}
+                    <div class="d-flex justify-content-center py-3">
+                        <button class="px-5"  {{#if existingOrderId}}data-order-id="{{existingOrderId}}"{{/if}} id="place-order-btn">PLACE ORDER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{!-- {{else}}
+    <div class="container p-5 text-center" id="empty-page-msg">
+        <img src="/images/add-to-cart-trolley-img.svg" alt="" style="width: 100px;">
+        <p class="text-center ">Your cart is empty... <a href="/home">Add items</a> to it now.</p>
+    </div>
+    {{/if}} --}}
+</div>
+<div class="overlay d-none" id="overlay"></div>
+<div id="order-placed-successBox" class="d-none">
+    <div class="modal-content">
+        <span class="close m-2" title="Back to home"><a href="/home" class="text-decor-none">&times;</a></span>
+        <div><i class="fa-solid fa-circle-check fa-3x" style="color: #00c853;"></i></div>
+        <h5 class="my-2 font-weight-bold">Order Successfully Placed</h5>
+        <div class="my-2 p-2 border-top border-bottom ">
+            <span class="text-sample font-weight-bold">Your Order ID is</span> <span class="text-danger"
+                id="orderId"></span>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <a href="/account/my_orders">
+                <button class="mt-3">MY ORDERS</button>
+            </a>
+        </div>
+    </div>
+</div>
+{{!-- success message box --}}
+<div id="successMsgBox"></div>
+
+
+<script>
+
+</script>

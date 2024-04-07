@@ -1,0 +1,111 @@
+{{>adminSideBar}}
+<div id="successMessage" class="alert alert-success text-center d-none"></div>
+<div class="container-fluid">
+  <div class=" pt-3" style=" display: inline-block; display: flex; justify-content: flex-end;">
+    <a href="/product_management/add_product"><button class="btn " style="width: content-fit; ">Add new product
+        +</button></a>
+  </div>
+  <div class="row">
+    <div class="container-fluid">
+      <h3 class="font-weight-bold mb-3">All Products</h3>
+
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover" id="category-table">
+          <thead class="table-header">
+            <tr>
+              <th scope="col">Product Name</th>
+              <th scope="col">Image</th>
+              <th scope="col">Price</th>
+              <th scope="col">Discount</th>
+              <th scope="col">Description</th>
+              <th scope="col">Stock Left</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each products}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td id="image-col"><img id="category-img" src="{{lookup ../dpImages @index}}" alt=""></td>
+              <td>{{this.price}}</td>
+              <td>{{this.discount}}</td>
+              <td>{{this.description}}</td>
+              {{#eq this.stock 0}}
+              <td class="text-danger alert alert-danger">{{this.stock}}</td>
+              {{else}}
+              <td>{{this.stock}}</td>
+              {{/eq}}
+              {{#if this.isActive}}
+              <td class="text-center  alert-success p-0" >Active</td>
+              {{else}}
+              <td class="text-center  alert-danger p-0">Inactive</td>
+              {{/if}}
+              <td class="action-cell">
+                <ul class="list-unstyled d-flex justify-content-around ">
+                  <li>
+                    <a href="/product_management/editProduct/{{ this._id}}" style="text-decoration: none; color:inherit">
+                      <i class="fa-regular fa-lg fa-pen-to-square" title="Edit"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/product_management/softDelete/{{this._id}}" class="text-decor-none" title="Active/Inactive">
+                      <i class="fa-solid fa-circle-minus fa-lg" data-user-id="{{this._id}}"
+                      onclick="displayConformation(this, event, 'Are you sure?','/product_management/softDelete/{{this._id}}')"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/deleteProduct/{{this._id}}">
+                      <i class="fa-solid fa-trash-can fa-lg" style="color: #c80000;" title="Delete"
+                        data-user-id="{{this._id}}"
+                        onclick="displayConformation(this, event, 'Are you sure, Do you want to delete this product?','deleteProduct/{{this._id}}')"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      {{#unless products}}
+      <div class=" container p-5 text-center">
+        <p class="mt-5 text-center text-danger">No product found...create new one </p>
+        <i class="fa-solid fa-arrow-up"></i>
+      </div>
+      {{/unless}}
+    </div>
+  </div>
+  <div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+      <p id="conform-message"></p>
+      <div class="buttonContainer">
+        <button id="cancelButton">Cancel</button>
+        <button id="confirmButton">Yes</button>
+      </div>
+    </div>
+  </div>
+  {{! pagination }}
+  {{#if pages}}
+  <nav aria-label="Page navigation" id="pagination">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled" id="prevPageBtn">
+        <a class="page-link" id="prev-link" href="" tabindex="-1" aria-disabled="true"><i
+            class="fa-solid fa-angle-left"></i></a>
+      </li>
+      {{#each pages}}
+      <li class="page-item page-number mx-1" aria-current="page">
+        <a class="page-link " href="?page={{this}}">{{this}}</a>
+      </li>
+      {{/each}}
+      <li class="page-item" id="nextBtn">
+        <a class="page-link" id="next-link" href=""><i class="fa-solid fa-angle-right"></i></a>
+      </li>
+    </ul>
+  </nav>
+  {{/if}}
+</div>
+
+
+  {{!-- success message box --}}
+  <div id="successMsgBox"></div>

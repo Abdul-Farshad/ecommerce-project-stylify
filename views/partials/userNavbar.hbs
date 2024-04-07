@@ -1,0 +1,146 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <!-- Navbar brand -->
+      <div>
+        <ul class="navbar-nav">
+          <li class="">
+            <span>
+              <a href="/">
+                <h3 class="font-weight-bold logo-text">Stylify</h3>
+              </a>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarExample01"
+        aria-controls="navbarExample01"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class=""><img src="/images/menu-icon.svg" alt="" /></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarExample01">
+        <div class="mx-auto">
+          <!-- mx-auto for centering -->
+          <form class="form-inline" action="/searchProduct" method="GET">
+            {{! <form class="form-inline" action="/" method="GET"> }}
+            <div class="input-group w-100">
+              <input
+                class="form-control flex-grow-1"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name="search"
+              />
+              <div class="input-group-append">
+                <button class="search-btn" type="submit">
+                  <img
+                    class="search-icon"
+                    src="/images/search-icon.svg"
+                    alt=""
+                  />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <ul class="navbar-nav ml-auto">
+          {{#if isUser}}
+            <li class="nav-item">
+              <a
+                title="Cart"
+                class="nav-link user-nav-link p-2 mr-1 my-auto"
+                href="/cart"
+              >
+                <img src="/images/shopping-cart-icon.svg" alt="" />
+                <span
+                  class="cart-items-count"
+                  id="cart-qty"
+                >{{cartItemQty}}</span>
+                <span class="my-auto d-lg-none">Cart</span>
+              </a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a
+                title="Cart"
+                class="nav-link user-nav-link p-2 mr-1 my-auto"
+                href="/cart"
+              >
+                <img src="/images/shopping-cart-icon.svg" alt="" />
+                <span class="my-auto d-lg-none">Cart</span>
+              </a>
+            </li>
+          {{/if}}
+
+          <li class="nav-item">
+            <a
+              title="My wishlist"
+              class="nav-link user-nav-link p-2 mr-1 my-auto"
+              href="/account/wishlist"
+            ><img src="/images/heart-icon.svg" alt="" />
+              <span class="ml-3 my-auto d-lg-none">My wishlist</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              title="Account"
+              class="nav-link user-nav-link p-2 mr-1 my-auto dropdown-toggle dropdown-toggle-no-caret"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img src="/images/user-icon-2.svg" alt="" />
+              {{#unless isUser}}
+                <div id="arrow-box">Sign in here</div>
+              {{/unless}}
+              <span class="ml-3 my-auto d-lg-none">Account</span>
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-right"
+              aria-labelledby="navbarDropdown"
+            >
+              {{#if isUser}}
+                <a class="dropdown-item" href="/account">My account</a>
+                <a
+                  class="signOut-btn dropdown-item"
+                  href="/sign_out"
+                  onclick="displayConformation(this, event, 'Are you sure you want to sign out?','/sign_out')"
+                >Sign out</a>
+                <div class="dropdown-divider"></div>
+                <a
+                  class="deleteAc-link dropdown-item"
+                  href=""
+                  onclick="displayConformation(this, event, 'Are you sure you want to delete your account? This action is irreversible and will permanently delete all your data. Once deleted, your account cannot be recovered. Still do you want to continue?','/delete_account')"
+                >Delete my account</a>
+              {{else}}
+                <a class="dropdown-item" href="/user_signin">Sign in</a>
+                <a class="dropdown-item" href="/user_registration">Sign up</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              {{/if}}
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {{! signout conformation message box }}
+  <div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+      <p id="conform-message"></p>
+      <div class="buttonContainer">
+        <button id="cancelButton">Cancel</button>
+        <button id="confirmButton">Yes</button>
+      </div>
+    </div>
+  </div>
+</header>

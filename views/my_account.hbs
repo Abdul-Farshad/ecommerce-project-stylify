@@ -1,0 +1,27 @@
+{{>userNavbar}}
+
+<div class="container-fluid">
+  <section class="content-section">
+      <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+    <div class="row">
+      {{>userProfileSidebar}}
+      <div class="col-md-9">
+        <div class="profile-section p-4">
+          <h3 class="font-weight-bold mb-4">PROFILE INFORMATION</h3>
+            <h6 class="font-weight-bold">Full name</h6>
+              <p>{{userData.fname}}</p>
+            <h6 class="font-weight-bold">User name</h6>
+              <p>{{userData.userName}}</p>
+            <h6 class="font-weight-bold">Email address</h6>
+              <p>{{userData.email}}</p>
+            <h6 class="font-weight-bold">Phone number</h6>
+              <p>+91 {{userData.mobileNumber}}</p>
+              <div>
+                <a href="/account/edit_profile"> <button>EDIT PROFILE</button></a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

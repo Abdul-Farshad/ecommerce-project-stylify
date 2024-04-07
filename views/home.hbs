@@ -1,0 +1,117 @@
+{{>userNavbar}}
+<div class="container-fluid">
+  {{#if products}}
+  <section class="content-section">
+    <div class="row filter-sort-row">
+      <div class="col-6 filter-collapse-column">
+        <button class="navbar-toggler d-md-none" data-toggle="collapse" data-target="#filterColumn"
+          title="filter products">
+          <span class="">
+            <img src="/images/filter-icon.svg" alt="" /><span class="text-sample">Filter</span></span>
+        </button>
+      </div>
+      <div class="col-6">
+        <div class="sort-dropdown-div">
+          <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Sort by:
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item text-sample" href="/?sort=a-z" onclick="updateSort(event,'a-z')">Aa - Zz</a>
+            <a class="dropdown-item text-sample" href="/?sort=z-a" onclick="updateSort(event,'z-a')">Zz - Aa</a>
+            <a class="dropdown-item text-sample" href="/?sort=price_asc" onclick="updateSort(event,'price_asc')">Price:
+              Low to High</a>
+            <a class="dropdown-item text-sample" href="/?sort=price_desc"
+              onclick="updateSort(event,'price_desc')">Price: High to Low
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Left Column for Filters (Collapsed on Small Screens) -->
+        <div class="col-md-2 filter-column collapse d-md-block" id="filterColumn">
+          <!-- Your filter content -->
+          <h5 class="border-bottom pb-2 sidebar">Categories</h5>
+          <div class="categor-list-div border-bottom">
+            {{#if categories}}
+            <ul class="list-unstyled">
+              <li>
+                <a href="/home">All Categories</a>
+              </li>
+              {{#each categories}}
+              <li>
+                <a href="/?category={{this._id}}" onclick="filterCategory(event,{{this._id}})">{{this.name}}</a>
+              </li>
+              {{/each}}
+            </ul>
+            {{/if}}
+          </div>
+          <h5 class="border-bottom pb-2 pt-2 sidebar">Price</h5>
+
+          <div id="price-filter">
+          <ul class="list-unstyled">
+            <li><a class="text-sample" href="" onclick="filterByPrice(event, 'all')">All price</a></li>
+            <li><a class="text-sample" href="/?price=<500" onclick="filterByPrice(event, '<500')">Under ₹500</a></li>
+            <li><a class="text-sample" href="/?price=500-1000" onclick="filterByPrice(event, '500-1000')">₹500 - ₹1000</a></li>
+            <li><a class="text-sample" href="/?price=1000-2000" onclick="filterByPrice(event, '1000-2000')">₹1000 - ₹2000</a></li>
+            <li><a class="text-sample" href="/?price=>2000" onclick="filterByPrice(event, '>2000')">Above ₹2000</a></li>
+          </ul>
+          </div>
+        </div>
+
+        <!-- Right Column for Products -->
+        <div class="col-md-10 product-column">
+          <!--  product display  -->
+          <div class="row my-3">
+            {{#each products}}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+              <a href="/view/{{this._id}}" class="text-decor-none">
+                <div class="card text-center" style="width: 18rem;">
+                  <img class="card-img " src="{{lookup ../mainImgs @index}}" alt="Card image cap" />
+                  <div class="card-body">
+                    {{#eq this.stock 0}}
+                    <p class="text-danger mb-1 mx-0 text-sample">Currently unavailable</p>
+                    {{/eq}}
+                    <h5 class="card-title text-truncate">{{this.name}}</h5>
+                    <p class="card-text text-truncate">{{this.description}}</p>
+                    <h3 class="price font-weight-bold"><i
+                        class="fa-solid  fa-xs fa-indian-rupee-sign"></i>{{this.price}}</h3>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {{/each}}
+          </div>
+
+          {{! pagination }}
+          {{#if pages}}
+          <nav aria-label="Page navigation" id="pagination">
+            <ul class="pagination justify-content-center">
+              <li class="page-item disabled" id="prevPageBtn">
+                <a class="page-link" id="prev-link" href="" tabindex="-1" aria-disabled="true"><i
+                    class="fa-solid fa-angle-left"></i></a>
+              </li>
+              {{#each pages}}
+              <li class="page-item page-number mx-1" aria-current="page">
+                <a class="page-link " href="?page={{this}}">{{this}}</a>
+              </li>
+              {{/each}}
+              <li class="page-item" id="nextBtn">
+                <a class="page-link" id="next-link" href=""><i class="fa-solid fa-angle-right"></i></a>
+              </li>
+            </ul>
+          </nav>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </section>
+  {{else}}
+  <div class="mt-5 container p-5 text-center">
+    <img src="/images/no-data-found-img.jpg" alt="" style="width: 45%;">
+  <p class=" text-center text-danger">No products found...</p>
+  </div>
+  {{/if}}
+</div>

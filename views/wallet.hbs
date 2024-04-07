@@ -1,0 +1,99 @@
+{{> userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{> userProfileSidebar}}
+            <div class="col-md-9 scrollable-column">
+                {{#if message}}
+                <p class="alert alert-success text-center p-1 mt-1" id="successMsg">{{message}}</p>
+                {{/if}}
+                <div class="p-4">
+                    {{!-- <div class="col-12 col-md-11 "> --}}
+                        <h3 class="font-weight-bold mb-4">MY WALLET</h3>
+
+                        <div id="wallet-balance-box" class="text-white mb-4">
+                            <h1 class="font-weight-bold"><i class="bx bx-rupee bx-md"></i>{{balance}}</h1>
+                            <p class="ml-2">My Balance</p>
+                        </div>
+                        {{#if transactions}}
+                        <div id="transactions-section">
+                            <h5 class="font-weight-bold mb-3">Transactions</h5>
+                            <table class="table transaction-history-table">
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col">Transaction ID</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Transaction Type</th>
+                                        <th scope="col">Reason Type</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Transaction Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each transactions}}
+                                    <tr>
+                                        <td>{{this.transactionId}}</td>
+                                        <td>{{this.date}}</td>
+                                        {{#eq this.type "Credit"}}
+                                        <td class="text-success">{{this.type}}</td>
+                                        {{else}}
+                                        <td class="text-danger">{{this.type}}</td>
+                                        {{/eq}}
+                                        <td>{{this.reasonType}}</td>
+                                        <td>{{this.description}}</td>
+                                        {{#eq this.type "Credit"}}
+                                        <td class="text-success">+<i class="bx bx-rupee"></i>{{this.amount}}</td>
+                                        {{else}}
+                                        <td><i class="bx bx-rupee"></i>{{this.amount}}</td>
+                                        {{/eq}}
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                        {{else}}
+                        <div class=" container p-5 text-center">
+                            <p class="mt-2 text-center">No transaction history</p>
+                        </div>
+                        {{/if}}
+
+                        {{!--
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+        {{!-- success message box --}}
+        <div id="successMsgBox"></div>
+    </section>
+
+    {{! pagination }}
+    {{#if pages}}
+    <nav aria-label="Page navigation" id="pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled" id="prevPageBtn">
+                <a class="page-link" id="prev-link" href="" tabindex="-1" aria-disabled="true"><i
+                        class="fa-solid fa-angle-left"></i></a>
+            </li>
+            {{#each pages}}
+            <li class="page-item page-number mx-1" aria-current="page">
+                <a class="page-link " href="?page={{this}}">{{this}}</a>
+            </li>
+            {{/each}}
+            <li class="page-item" id="nextBtn">
+                <a class="page-link" id="next-link" href=""><i class="fa-solid fa-angle-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+    {{/if}}
+</div>
+<div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+        <p id="conform-message"></p>
+        <div class="buttonContainer">
+            <button id="cancelButton">Cancel</button>
+            <button id="confirmButton">Yes</button>
+        </div>
+    </div>
+</div>

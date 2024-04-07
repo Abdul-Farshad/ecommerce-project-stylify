@@ -1,0 +1,122 @@
+{{>adminSideBar}}
+<section>
+    {{#if msg}}
+    <div class="text-center">
+        <p class="alert alert-success p-1 mt-5 mb-1">{{msg}}</p>
+    </div>
+    {{/if}}
+</section>
+<section>
+    <div class="container-fluid px-5 my-3">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h3 class="font-weight-bold mb-4">Dashboard</h3>
+            </div>
+
+            <select id="admin-dashboard-dateFilter" onchange="location = '/admin_dashboard?f=' + this.value;">
+                <option value="" hidden>All Time</option>
+                <option value="all" {{#eq filterValue "all" }}selected{{/eq}}selected>All Time</option>
+                <option value="t" {{#eq filterValue "t" }}selected{{/eq}}>Today</option>
+                <option value="w" {{#eq filterValue "w" }}selected{{/eq}}>This Week</option>
+                <option value="m" {{#eq filterValue "m" }}selected{{/eq}}>This Month</option>
+            </select>
+        </div>
+
+
+        <div class="container-fluid">
+
+            <div class="main">
+
+                <div class="summery-box-container">
+
+                    <div class="summery-box box1">
+                        <div class="text">
+                            <h2 class="topic-heading">{{ordersCount}}</h2>
+                            <h2 class="topic">Orders</h2>
+                        </div>
+                    </div>
+                    <div class="summery-box box2">
+                        <div class="text">
+                            <h2 class="topic-heading"><i class="bx bx-rupee bx-sm"></i>{{totalSales}}</h2>
+                            <h2 class="topic">Sales</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="summery-box box3">
+                        <div class="text">
+                            <h2 class="topic-heading">{{productCount}}</h2>
+                            <h2 class="topic">Total Product</h2>
+                        </div>
+                    </div>
+
+                    <div class="summery-box box4">
+                        <div class="text">
+                            <h2 class="topic-heading">{{customers}}</h2>
+                            <h2 class="topic">Customers</h2>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row graph-row">
+                    <div class="col-12 col-md-6 mt-5 text-center">
+                        <h5 class="font-weight-bold">Sales Overview</h5>
+                        <div class="chart-box">
+                            <canvas id="salesChart" width="400" height="300"></canvas>
+                            <select name="chart-filter" id="chart-filter">
+                                <option value="tw">This Week</option>
+                                <option value="w">Weekly</option>
+                                <option value="m">Monthly</option>
+                                <option value="y">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 mt-5 text-center">
+                        <h5 class="font-weight-bold">Top Selling Products and Categories</h5>
+                         <div class="chart-box p-1">
+                            <canvas id="rankingChart" width="400" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="report-container">
+                    <div class="report-header">
+                        <h1 class="recent-orders">Recent Orders</h1>
+                        <a href="/orders"><button class="view">View All</button></a>
+                    </div>
+                    {{#if orders}}
+                    <div class="report-body">
+                        <div class="report-topic-heading">
+                            <h3 class="t-op">Order ID</h3>
+                            <h3 class="t-op">Total amount</h3>
+                            <h3 class="t-op">Status</h3>
+                            <h3 class="t-op">Payment Status</h3>
+                        </div>
+
+                        <div class="items">
+                            {{#each orders}}
+                            <div class="item1">
+                                <h3 class="t-content">{{this.orderId}}</h3>
+                                <h3 class="t-content"><i class="bx bx-rupee bx-xs"></i>{{this.totalAmount}}</h3>
+                                {{#eq this.status "Cancelled"}}
+                                <h3 class="t-content text-danger">{{this.status}}</h3>
+                                {{else eq this.status "Delivered"}}
+                                <h3 class="t-content text-success">{{this.status}}</h3>
+                                {{else}}
+                                <h3 class="t-content">{{this.status}}</h3>
+                                {{/eq}}
+
+                                {{#eq this.paymentStatus "Success"}}
+                                <h3 class="t-content text-success">{{this.paymentStatus}}</h3>
+                                {{else}}
+                                <h3 class="t-content">{{this.paymentStatus}}</h3>
+                                {{/eq}}
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+            <hr>
+        </div>

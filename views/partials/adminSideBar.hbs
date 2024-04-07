@@ -1,0 +1,98 @@
+<nav class="navbar navbar-light bg-light" id="admin-navbar">
+  <ul class="navbar-nav d-flex flex-row align-items-center">
+    <li onclick="sideNavToggle()" class="mr-3">
+      <i class="fa-solid fa-bars fa-lg main-menu-icon"></i>
+    </li>
+    <li class="nav-item">
+      <a href="/admin_dashboard">
+        <h3 class="font-weight-bold logo-text">Stylify</h3>
+      </a>
+    </li>
+  </ul>
+
+  <div class="side-bar">
+    <ul class="navbar-nav d-flex flex-row align-items-center my-2">
+      <li class="mx-3">
+        <i class="fa-solid fa-bars fa-lg side-menu-icon"></i>
+      </li>
+      <li class="nav-item">
+        <a href="/admin_dashboard">
+          <h3 class="font-weight-bold logo-text">Stylify</h3>
+        </a>
+      </li>
+    </ul>
+    <div class="side-bar-content">
+      <ul>
+        <li class="sideNav-item selected">
+          <a href="/admin_dashboard" class="nav-link">
+            <i class="fa-solid fa-house fa-lg icon"></i>
+            <span class="link">Dashboard</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/product_management" class="nav-link">
+            <i class="fa-solid fa-box-open fa-lg icon"></i>
+            <span class="link">Products</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/category" class="nav-link">
+            <i class="fa-solid fa-layer-group fa-lg icon"></i>
+            <span class="link">Category</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/orders" class="nav-link">
+            <i class="fa-solid fa-clipboard-list fa-lg icon ml-1"></i>
+            <span class="link">Orders</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/user_management" class="nav-link">
+            <i class="fa-solid fa-users-gear fa-lg icon"></i>
+            <span class="link">Customers</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/coupon" class="nav-link">
+            <i class="fa-solid fa-ticket-simple fa-lg icon"></i>
+            <span class="link">Coupons</span>
+          </a>
+        </li>
+        <li class="sideNav-item">
+          <a href="/sales_report" class="nav-link">
+            <i class="fa-solid fa-file-invoice-dollar fa-lg icon ml-1"></i>
+            <span class="link">Sales Report</span>
+          </a>
+        </li>
+      </ul>
+      <div class="bottom-content">
+        <ul class="border-top">
+          <li class="sideNav-item">
+            <a
+              href="/admin_signout"
+              class="nav-link"
+              onclick="displayConformation(this, event, 'Are you sure you want to sign out?','/admin_signout')"
+            >
+              <i
+                class="fa-solid fa-right-from-bracket fa-flip-horizontal fa-lg icon ml-1"
+              ></i>
+              <span class="link">Log out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<section class="over-layer"></section>
+{{! signout conformation message box }}
+<div id="confirmationDialog" class="d-none">
+  <div class="dialogContent">
+    <p id="conform-message"></p>
+    <div class="buttonContainer">
+      <button id="cancelButton">Cancel</button>
+      <button id="confirmButton">Yes</button>
+    </div>
+  </div>
+</div>

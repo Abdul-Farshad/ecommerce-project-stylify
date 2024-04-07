@@ -1,0 +1,99 @@
+{{> userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{> userProfileSidebar}}
+            <div class="col-md-9 scrollable-column">
+                {{#if message}}
+                <p class="alert alert-success text-center p-1 mt-1" id="successMsg">{{message}}</p>
+                {{/if}}
+                <div class="address-section p-4">
+                    <h3 class="font-weight-bold mb-4">MY ORDERS</h3>
+                    {{!-- <div id="address-display"> --}}
+                        {{#if formattedOrders}}
+                        <table class="table table-striped table-bordered table-hover" id="category-table">
+                            <thead class="table-header">
+                                <tr>
+                                    <th scope="col">Order Id #</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Order Total</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each formattedOrders}}
+                                <tr>
+                                    <td>{{this.orderId}}</td>
+                                    <td>{{this.createdAt}}</td>
+                                    <td><i class="bx bx-rupee bx-xs"></i>{{this.totalAmount}}</td>
+                                    <td class="text-center p-0">
+                                        {{#eq this.status "Cancelled"}}
+                                        <span class="text-danger">{{this.status}}</span>
+                                        {{else eq this.status "Delivered"}}
+                                        <span class="text-success">{{this.status}}</span>
+                                        {{else eq this.status "Shipped"}}
+                                        <span class="text-primary">{{this.status}}</span>
+                                        {{else}}
+                                        <span>{{this.status}}</span>
+                                        {{/eq}}
+                                    </td>
+                                    <td class="action-cell">
+                                        <ul class="list-unstyled d-flex justify-content-around">
+                                            <li>
+                                                <a href="/account/my_orders/order_details/{{this._id}}"
+                                                    class="text-decor-none">
+                                                    <i class="fa-regular fa-eye fa-lg" title="View Order"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                        {{else}}
+                        <div class=" container p-5 text-center">
+                            <p class="mt-5 text-center text-danger">No Orders found... Order now </p>
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </div>
+                        {{/if}}
+                    {{!-- </div> --}}
+                </div>
+            </div>
+        </div>
+        {{!-- success message box --}}
+        <div id="successMsgBox"></div>
+    </section>
+
+    {{! pagination }}
+  {{#if pages}}
+  <nav aria-label="Page navigation" id="pagination">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled" id="prevPageBtn">
+        <a class="page-link" id="prev-link" href="" tabindex="-1" aria-disabled="true"><i
+            class="fa-solid fa-angle-left"></i></a>
+      </li>
+      {{#each pages}}
+      <li class="page-item page-number mx-1" aria-current="page">
+        <a class="page-link " href="?page={{this}}">{{this}}</a>
+      </li>
+      {{/each}}
+      <li class="page-item" id="nextBtn">
+        <a class="page-link" id="next-link" href=""><i class="fa-solid fa-angle-right"></i></a>
+      </li>
+    </ul>
+  </nav>
+  {{/if}}
+</div>
+<div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+        <p id="conform-message"></p>
+        <div class="buttonContainer">
+            <button id="cancelButton">Cancel</button>
+            <button id="confirmButton">Yes</button>
+        </div>
+    </div>
+</div>

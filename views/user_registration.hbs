@@ -1,0 +1,105 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 my-auto">
+                <img class="login-img" src="/images/create-account-img.jpg" alt="">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 my-auto">
+                {{#if errors}}
+                <div class="alert alert-danger alert-dismissible fade show p-0 mb-0" role="alert"
+                    id="user-reg-error-container">
+                    <ul class="list-unstyled my-auto py-2">
+                        {{#each errors}}
+                        <li class="ml-2 text-sample">{{msg}}</li>
+                        {{/each}}
+                    </ul>
+                    <button type="button" class="close " data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{/if}}
+                <div class="form-container">
+                    <h2 class="mb-4 login-header">SIGN UP</h2>
+                    {{#if error}}
+                    <p class="alert alert-danger p-0 text-center text-sample">{{error}}</p>
+                    {{/if}}
+                    <form action="/user_registration" method="post" id="user-register-form">
+                        <div class="form-group">
+                            <div><label for="fullName">Full name</label></div>
+                            <input type="text" class="form-control signup-input" id="fname"
+                                placeholder="Enter your full name" name="fname" value="{{#if fname}}{{fname}}{{/if}}">
+                            <div class="invalid-feedback" id="fnameError">
+                                Please enter your full name
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div><label for="username">User name</label></div>
+                            <input type="text" class="form-control signup-input" id="username"
+                                placeholder="Enter your username" name="username" {{#if
+                                username}}value={{username}}{{/if}}>
+                            <div class="invalid-feedback" id="usernameError">
+                                Please enter a username
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div><label for="email">Email address</label></div>
+                            <input type="email" class="form-control signup-input" id="email"
+                                placeholder="Enter your email" name="email" {{#if email}}value={{email}}{{/if}}>
+                            <div class="invalid-feedback" id="emailError">
+                                Please enter a email address
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div><label for="mobileNumber">Mobile number</label></div>
+                            <input type="tel" class="form-control signup-input" id="mobile" maxlength="10"
+                                placeholder="Mobile number" name="mobile" {{#if mobile}}value={{mobile}}{{/if}}>
+                            <div class="invalid-feedback" id="mobileError">
+                                Please enter a mobile number
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div><label for="password">Password</label></div>
+                            <div class="password-container">
+                                <input type="password" placeholder="Enter a password" name="password"
+                                    class="form-control signup-input" id="password" {{#if pass}}value={{pass}}{{/if}}>
+                                <i class="fa-regular fa-eye-slash fa-sm toggle-password" onclick="togglePassword(event)"
+                                    title="Toggle password"></i>
+                                <div class="invalid-feedback" id="passwordError">Please enter a password</div>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="SUBMIT" id="userReg-submit-btn">
+                    </form>
+                    <div class="para-container">
+                        <p class="login-form-para">Already have an account? <a href="/user_signin">Sigin</a></p>
+                    </div>
+                </div>
+                {{#if showOTPSection}}
+                <div class="overlay"></div>
+                <div id="otp-section">
+                    <div class="modal-content">
+                        <span class="close m-2" onclick="closeOtpModal()">&times;</span>
+                        <h2>Enter OTP</h2>
+                        <p class="login-form-para">Enter the 4-digit OTP sent to your email</p>
+                        <p id="timer">0:00</p>
+                        <form action="/user_signup" method="post" class="otpForm" id="otp-form">
+                            <div class="form-group">
+                                <input type="text" placeholder="0" class="code otp-input" maxlength="1" name="code1">
+                                <input type="text" placeholder="0" class="code otp-input" maxlength="1" name="code2">
+                                <input type="text" placeholder="0" class="code otp-input" maxlength="1" name="code3">
+                                <input type="text" placeholder="0" class="code otp-input" maxlength="1" name="code4">
+                            </div>
+                            <p class="text-danger text-sample p-0 m-0" id="otp-error">{{#if
+                                otpError}}{{otpError}}{{/if}}</p>
+                            <p class="text-success text-sample p-0 m-0 d-none" id="otp-resend-msg">New OTP sent. Please
+                                check your email</p>
+                            <button class="btn btn-primary otp-btn m-3" type="submit">SUBMIT OTP</button>
+                            <p class="login-form-para">Didn't get the OTP? <a href="/resend_otp"
+                                    onclick="WhenOtpResend(this,20000,event)">Resend OTP</a></p>
+                        </form>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+</section>

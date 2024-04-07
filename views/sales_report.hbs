@@ -1,0 +1,112 @@
+{{>adminSideBar}}
+<section>
+    <div class="container-fluid px-5 my-3">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h3 class="font-weight-bold mb-4">Sales Report</h3>
+            </div>
+            <div class="text-right">
+                <select id="sales-report-filter" onchange="location = '/sales_report?f=' + this.value;">
+                    <option value="" hidden>All Time</option>
+                    {{!-- <option value="all" {{#eq filterValue "all" }}selected{{/eq}}selected>All Time</option> --}}
+                    <option value="t" {{#eq filterValue "t" }}selected{{/eq}}>Today</option>
+                    <option value="w" {{#eq filterValue "w" }}selected{{/eq}}>This Week</option>
+                    <option value="m" {{#eq filterValue "m" }}selected{{/eq}}>This Month</option>
+                </select>
+
+                <span class="sales-report-download cursor-pointer py-2 px-3">
+                    <i class="fa-solid fa-file-arrow-down fa-xl dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/download_sales_report?f=pdf&d={{filterValue}}{{#if startDate}}&s-date={{startDate}}{{/if}}{{#if endDate}}&e-date={{endDate}}{{/if}}">PDF</a>
+                        <a class="dropdown-item" href="/download_sales_report?f=excel&d={{filterValue}}{{#if startDate}}&s-date={{startDate}}{{/if}}{{#if endDate}}&e-date={{endDate}}{{/if}}">Excel</a>
+                    </div>
+                </span>
+
+                <div id="custom-date-section">
+                    <form action="sales_report" id="custom-date-form">
+                        <label for="start-date">Start Date:</label>
+                        <input type="date" id="start-date" class="custom-date-input" name="s-date" {{#if
+                            startDate}}value="{{startDate}}" {{/if}}>
+                        <label for="end-date">End Date:</label>
+                        <input type="date" id="end-date" class="custom-date-input" name="e-date" {{#if
+                            endDate}}value="{{endDate}}" {{/if}}>
+                        <button dis type="submit" id="apply-filter-btn" class="mt-2">Apply</button>
+                        <p class="text-sample3 text-danger d-none" id="customDate-error">
+                            <i class="fa-solid fa-circle-exclamation fa-sm mr-1" style="color: #dc3545;"></i>Start date cannot be a future date</p>
+                    </form>
+                </div>
+                {{!-- check both dates entered --}}
+                <script>
+                    const startDateInput = document.getElementById('start-date');
+                    const endDateInput = document.getElementById('end-date');
+                    const applyButton = document.getElementById('apply-filter-btn');
+                    function checkDates() {
+                        applyButton.disabled = !(startDateInput.value && endDateInput.value);
+                    }
+                    // Check dates on initial load
+                    checkDates();
+                    startDateInput.addEventListener('input', checkDates);
+                    endDateInput.addEventListener('input', checkDates);
+                </script>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+        <div class="main">
+            <table class="table table-responsive " id="sales-report-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each sales}}
+                    {{#each this.products}} <!-- Iterate over each product in the products array -->
+                    <tr>
+                        {{#eq @index 0}} <!-- Only display order details for the first product -->
+                        <td rowspan="{{../products.length}}" class="text-sample">{{../orderId}}</td>
+                        <td rowspan="{{../products.length}}" class="text-sample">{{../date}}</td>
+                        <td rowspan="{{../products.length}}" class="text-sample">{{../user}}</td>
+                        <td rowspan="{{../products.length}}" class="text-sample">{{../paymentMethod}}</td>
+                        <td class="text-sample">{{product.name}}</td>
+                        <td class="text-sample">{{quantity}}</td>
+                        <td class="text-sample"><i class="bx bx-rupee bx-xs"></i>{{price}}</td>
+                        <td rowspan="{{../products.length}}" class="text-sample"><i
+                                class="bx bx-rupee bx-xs"></i>{{../discount}}</td>
+                        <td rowspan="{{../products.length}}" class="text-sample font-weight-bold"><i
+                                class="bx bx-rupee bx-xs"></i>{{../totalAmount}}</td>
+                        {{else}}
+                        <td class="text-sample">{{product.name}}</td>
+                        <td class="text-sample">{{quantity}}</td>
+                        <td class="text-sample"><i class="bx bx-rupee bx-xs"></i>{{price}}</td>
+                        {{/eq}}
+                    </tr>
+                    {{/each}}
+                    {{/each}}
+                </tbody>
+                <tfoot id="sales-report-footer">
+                    <tr>
+                        <td colspan="7" class="text-right">Total:</td>
+                        <td id="total-discount" class=" font-weight-bold"><i
+                                class="bx bx-rupee bx-xs"></i>{{totalDiscount}}</td>
+                        <td id="total-amount" class=" font-weight-bold"><i class="bx bx-rupee bx-xs"></i>{{grandTotal}}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    </div>
+    <section>

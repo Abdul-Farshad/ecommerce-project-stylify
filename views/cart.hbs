@@ -1,0 +1,79 @@
+{{>userNavbar}}
+<div class="container py-3">
+    {{#if cartItems.length}}
+    <section class="content-section">
+        <input type="hidden" value="cart" id="page">
+        <h3 class="font-weight-bold">Shopping Cart</h3>
+        <div class="row">
+            <div class="col-12 col-md-9 scrollable-column">
+                <ul class="my-3">
+                    {{#each cartItems}}
+                    <li class="cart-item" data-product-id="{{this._id}}">
+                        <i class="fa-regular fa-circle-xmark fa-lg cursor-pointer remove-cart-item" title="Remove"></i>
+                        <a href="/view/{{this.productId._id}}" class="cart-img-box"><img
+                                src="{{firstImage this.productId.images}}" alt=""></a>
+                        <a href="/view/{{this.productId._id}}" class="text-decor-none">
+                            <p title="{{this.productId.name}}" class="pro-name">{{ this.productId.name}}</p>
+                        </a>
+                        <span class="qty-box">
+                            <button><i class="minus-btn fa-solid fa-minus"></i></button>
+                            <span class="qty">{{this.quantity}}</span>
+                            <button><i class="plus-btn fa-solid fa-plus"></i></button>
+                        </span>
+                        <p class="reg-price m-0 text-secondary"><i class="bx bx-rupee bx-xs"></i>{{
+                            this.productId.regularPrice}}</p>
+                        <p class="m-0 font-weight-bold"><i class="bx bx-rupee bx-xs"></i>{{ this.productId.price }}</p>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <div class="col-12 col-md-3 fixed-column">
+                <div class="cart-summery">
+                    <h5>Cart Summary</h5>
+                    <hr>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Subtotal</div>
+                        <div class="col-6 text-right" id="cart-subtotal"><i class="bx bx-rupee bx-xs"></i>{{subtotal}}
+                        </div>
+                    </div>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Shipping</div>
+                        <div class="col-6 text-right" id="shipping-charge">
+                            {{#eq shippingCharge 0}}
+                            Free
+                            {{else}}
+                            <i class="bx bx-rupee bx-xs"></i>{{shippingCharge}}
+                            {{/eq}}
+                        </div>
+                    </div>
+                    <div class="row cart-summery-list">
+                        <div class="col-6">Discount</div>
+                        <div class="col-6 text-right" id="cart-discount">-<i class="bx bx-rupee bx-xs"></i>{{discount}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row cart-summery-list">
+                        <div class="col-6"><strong>Total</strong></div>
+                        <div class="col-6 text-right font-weight-bold" id="cart-total"><strong><i
+                                    class="bx bx-rupee bx-xs"></i>{{total}}</strong></div>
+                    </div>
+                    <div class="d-flex justify-content-center py-3">
+                        <a href="/cart/checkout"><button id="checkout-btn"> PROCEED TO CHECKOUT</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- success message box --}}
+        <div id="successMsgBox"></div>
+    </section>
+    {{else}}
+    <div class="container p-5 text-center" id="empty-page-msg">
+        <img src="/images/add-to-cart-trolley-img.svg" alt="" style="width: 100px;">
+        <p class="text-center ">Your cart is empty... <a href="/home">Add items</a> to it now.</p>
+    </div>
+    {{/if}}
+</div>
+
+{{!-- success message box --}}
+<div id="successMsgBox"></div>

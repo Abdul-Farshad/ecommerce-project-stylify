@@ -1,0 +1,100 @@
+{{>userNavbar}}
+
+<section class="content-section">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 order-1 order-md-0 border-right" id="col-1">
+                <div id="item-img-container">
+                    <div id="sub-img-set" class="mr-1">
+                        {{#each product.images}}
+                        <div class="sub-img">
+                            <img src="{{this}}" alt="Sub Image {{@index}}" class="img-fluid">
+                        </div>
+                        {{/each}}
+                    </div>
+                    <div id="main-img-div" onclick="zoomProduct(event)">
+                        <img src="{{firstImage product.images}}" alt="Main Image" class="img-fluid" id="main-img">
+                        {{#if itemInWishlist}}
+                        <button id="fav-btn" data-pro-id="{{product._id}}">
+                            <i id="favIcon" class='bx bxs-heart bx-border-circle bx-sm bx-tada-hover favColor'></i>
+                        </button>
+                        {{else}}
+                        <button id="fav-btn" data-pro-id="{{product._id}}">
+                            <i id="favIcon" class='bx bxs-heart bx-border-circle bx-sm bx-tada-hover'></i>
+                        </button>
+                        {{/if}}
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 order-2 order-md-1 border-right" id="col-2">
+                <div class="container-fluid mt-3">
+                    <h4 class="product-name">{{#if product.name}}{{product.name}}{{/if}}</h4>
+                    <div class="d-flex border-bottom pb-3">
+                        <div class="d-flex bg-primary px-2 text-white" id="show-rating-box">
+                            <span>3.6</span>
+                            <span>
+                                <ion-icon name="star"></ion-icon>
+                            </span>
+                        </div>
+                        <span>(300)ratings</span>
+                    </div>
+                    <div class="pt-3 pb-3 border-bottom">
+                        <div class="d-flex">
+                            <span>
+                                <h4 class="mr-2 text-success">-{{discountPercentage}}%</h4>
+                            </span>
+                            <i class="bx bx-rupee bx-xs"></i>
+                            <h4 class="price">{{product.price}}</h4>
+                        </div>
+                        {{#eq product.regularPrice product.price}}
+                        {{else}}
+                        <div class="text-sample text-secondary ">
+                            <p class="mb-0">M.R.P ₹<span id="reg-price">{{#if
+                                    product.regularPrice}}{{product.regularPrice}}{{/if}}</span> (77% off)</p>
+                        </div>
+                        {{/eq}}
+                        <p class="text-sample mb-0">Inclusive of all taxes</p>
+                    </div>
+                    {{#eq product.stock 0}}
+                    <div class="pt-3 pb-4 border-bottom">
+                        <h2 class="font-weight-bold">Sold Out</h2>
+                        <h5 class="text-secondary">This item is currently out of stock</h5>
+                    </div>
+                    {{else}}
+                    <div class="buyNow-btn-section pt-3 pb-4 border-bottom">
+                        <div>
+                            <a href="/add_to_cart"><button id="add-to-cart-btn" data-product-id="{{product._id}}">Add to
+                                    Cart</button></a>
+                        </div>
+                        <div>
+                            <a href="#"><button id="buy-now-btn" class="btn-primary" disabled>Buy Now</button></a>
+                        </div>
+                    </div>
+                    {{/eq}}
+
+                    <div class="pt-4 pb-3 d-flex flex-row justify-content-around text-secondary">
+                        <span class="text-center text-sample text-wrap">
+                            <img class="icon-size2 mb-1" src="/images/return-product-icon.svg" alt="">
+                            <p>10 days return</p>
+                        </span>
+                        <span class="text-center text-sample text-wrap">
+                            <img class="icon-size2 mb-1" src="/images/cash-hand-icon.svg" alt="">
+                            <p>Cash on delivery</p>
+                        </span>
+                        <span class="text-center text-sample text-wrap">
+                            <img class="icon-size2 mb-1" src="/images/free-delivery-icon.svg" alt="">
+                            <p>Free delivery</p>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    {{!-- success message box --}}
+    <div id="successMsgBox"></div>
+</section>

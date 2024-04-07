@@ -1,0 +1,107 @@
+{{>adminSideBar}}
+
+<div class="container-fluid px-5 my-3">
+    <h3 class="font-weight-bold mb-4">Add product</h3>
+    <div class="row ">
+        <div class="col-12 col-md-6 border border-dark  rounded p-3" id="form-col">
+            <h6 class="mb-3 font-weight-bold">General Information</h6>
+
+            <form action="" method="post" id="add-product-form">
+                <div class="form-group">
+                    <label class="text-sample">Product Name</label>
+                    <input class="rounded border border-secondary" id="product-name" type="text"
+                        placeholder="Type product name here">
+                    <p class="text-sample3 text-danger p-0" id="proNameError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Product Category</label>
+                        {{#if categories}}
+                    <select name="category" id="category"
+                        class="rounded border border-secondary cursor-pointer text-sample p-1">
+                        <option value="0" hidden>Select category</option>
+                        {{#each categories}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                    {{else}}
+                    <a href="/category" class="text-sample border rounded p-1">Add categories</a>
+                        {{/if}}
+                    <p class="text-sample3 text-danger p-0" id="categoryError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Regular price</label>
+                    <input class="rounded border border-secondary" id="regular-price" type="number"
+                        placeholder="Enter regular price">
+                    <p class="text-sample3 text-danger p-0" id="regPriceError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample ">Your selling price</label>
+                    <input class="rounded border border-secondary" id="selling-price" type="number"
+                        placeholder="Enter your selling price">
+                    <p class="text-sample3 text-danger p-0" id="sellingPriceError"></p>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="discount-set">
+                                <label class="text-sample font-weight-bold">Discount Amount:</label>
+                                <div class="input-group">
+                                    <input class="form-control rounded border border-secondary" id="dis-amount-input"
+                                        type="number" placeholder="Enter discount amount">
+                                </div>
+                                <p class="text-sample3 text-danger p-0" id="disError"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="discount-set">
+                                <label class="text-sample font-weight-bold">Discount:</label>
+                                <div class="input-group">
+                                    <input class="form-control rounded border border-secondary" id="dis-%-input"
+                                        type="number" placeholder="Enter discount %">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <p class="text-sample3 text-danger p-0" id="disPerceError"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample font-weight-bold">Stock</label>
+                    <div class="input-group">
+                        <input class="form-control rounded border border-secondary" id="stock" type="number"
+                            placeholder="Enter stock">
+                    </div>
+                    <p class="text-sample3 text-danger p-0" id="stockError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample">Description</label>
+                    <textarea class="form-control border border-secondary" id="description" rows="3"></textarea>
+                    <p class="text-sample3 text-danger p-0" id="descriptionError"></p>
+                </div>
+                <div class="form-group mb-0">
+                    <input type="submit" value="ADD PRODUCT" class="btn border-0 font-weight-bold">
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-6 p-3">
+            <div class="">
+                <h6 class="mb-3 font-weight-bold">Images</h6>
+                <form id="uploadForm">
+                    <label class="custom-file-upload" for="imageUpload">
+                        <i class="fas fa-cloud-upload-alt"></i> <span class="text-sample">Upload Images</span>
+                    </label>
+                    <input class="d-none is-invalid" type="file" id="imageUpload" name="images" accept="image/*"
+                        multiple>
+                    <p class="text-sample3 text-danger p-0 " id="imageUploadError"></p>
+                </form>
+                <div id="imagePreviews" class="image-previews-container">
+                    <div class="row" id="imagePreviewRow">
+                        <!-- Image preview containers will be dynamically added here up to 5-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

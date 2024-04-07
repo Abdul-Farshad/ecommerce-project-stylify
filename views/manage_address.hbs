@@ -1,0 +1,63 @@
+{{>userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{>userProfileSidebar}}
+            <div class="col-md-9">
+                {{#if message}}
+                <p class="alert alert-success text-center p-1 mt-1" id="successMsg">{{message}}</p>
+                {{/if}}
+                <div class="address-section p-4">
+                    <h3 class="font-weight-bold mb-4">MANAGE ADDRESS</h3>
+                    <a href="/account/manage_address/add_address" id="add-address-btn">
+                        <div id="add-address-btn-container">
+                            <i class="fa-solid fa-plus"></i> ADD A NEW ADDRESS
+                        </div>
+                    </a>
+                    <div id="address-display">
+                        {{#if userAddress}}
+                        {{#each userAddress}}
+                        <div class="address-container">
+                            <p><strong>{{this.name}}</strong></p>
+                            <p>{{this.city}},{{this.state}} {{this.PINCode}}</p>
+                            <p>{{this.country}}</p>
+                            <p>Mobile number: {{this.mobile}}</p>
+                            <p>{{#if this.landmark}}{{this.landmark}}{{/if}}</p>
+                            <p>Area or Street: {{this.address}}</p>
+
+                            <div class="address-actions">
+                                <span><a href="/account/manage_address/edit_address/{{this._id}}" class="text-sample">Edit</a></span>
+                                <span>|</span>
+                                <span><a href="/deleteAddress/{{this._id}}" data-user-id="{{this._id}}"
+                                        class="text-sample"
+                                        onclick="displayConformation(this, event, 'Are you sure you want to remove this address?','/deleteAddress/{{this._id}}')">Remove</a></span>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{else}}
+                        <div class=" container p-5 text-center">
+                             <img src="/images/address-svg-icon.png">
+                            <p class="mt-5 text-center">No address found... Add new one</p>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+        <p id="conform-message"></p>
+        <div class="buttonContainer">
+            <button id="cancelButton">Cancel</button>
+            <button id="confirmButton">Yes</button>
+        </div>
+    </div>
+</div>
+
+{{!-- success message box --}}
+    <div id="successMsgBox"></div>
+</section>
+</div>

@@ -1,0 +1,52 @@
+{{> userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{> userProfileSidebar}}
+            <div class="col-md-9 scrollable-column">
+                {{#if message}}
+                <p class="alert alert-success text-center p-1 mt-1" id="successMsg">{{message}}</p>
+                {{/if}}
+                <div class="address-section p-4">
+                    <h3 class="font-weight-bold mb-4">MY WISHLIST</h3>
+                   <div class="col-12 col-md-11">
+                        {{#if wishlistItems}}
+                        <ul class="my-3">
+                            {{#each wishlistItems}}
+                            <li class="cart-item wish-product" data-product-id="{{this.productId}}">
+                                <a href="/view/{{this.productId}}" class="cart-img-box"><img
+                                        src="{{this.image}}" alt=""></a>
+                                <a href="/view/{{this.productId}}" class="text-decor-none">
+                                    <p title="{{this.proName}}" class="pro-name">{{ this.proName}}</p>
+                                </a>
+                                <p class="reg-price m-0 text-secondary"><i class="bx bx-rupee bx-xs"></i>{{ this.regPrice }}</p>
+                                <p class="pro-price m-0"><i class="bx bx-rupee bx-xs"></i>{{ this.proPrice }}</p>
+                                <i class="fa-solid fa-trash fa-md cursor-pointer wishlist-item-remove" style="color: #9e9e9e;" title="Remove"></i>
+                            </li>
+                            {{/each}}
+                        </ul>
+                        {{else}}
+                        <div class=" container p-5 text-center">
+                            <img src="/images/add-to-wishlist-cart-img.svg" alt="" style="width: 100px;">
+                            <p class="mt-2 text-center">You have no items in your wishlist. Start adding!</p>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{!-- success message box --}}
+        <div id="successMsgBox"></div>
+    </section>
+</div>
+<div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+        <p id="conform-message"></p>
+        <div class="buttonContainer">
+            <button id="cancelButton">Cancel</button>
+            <button id="confirmButton">Yes</button>
+        </div>
+    </div>
+</div>

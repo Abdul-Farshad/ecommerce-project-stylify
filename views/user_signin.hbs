@@ -1,0 +1,85 @@
+<section>
+  {{#if message}}
+    <p class="alert alert-success text-center p-1">{{message}}</p>
+  {{/if}}
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 my-auto">
+        <img class="login-img" src="/images/signin-img.jpg" alt="" />
+      </div>
+
+      <div class="col-12 col-sm-12 col-md-6 my-auto">
+
+        <div class="form-container">
+          <h2 class="mb-4 login-header">LOGIN</h2>
+          {{#if error}}
+            <p
+              class="alert alert-danger p-0 text-center text-sample"
+            >{{error}}</p>
+          {{/if}}
+          <form action="/user_signin" method="post" id="user-signin">
+            <div class="form-group">
+              <div><label for="username">User name</label></div>
+              <input
+                type="text"
+                class="form-control signin-input"
+                id="username"
+                placeholder="Enter your username"
+                name="username"
+              />
+              <div class="invalid-feedback" id="usernameError">
+                *Please enter your username
+              </div>
+            </div>
+            <div class="form-group">
+              <div><label for="password">Password</label></div>
+              <div class="password-container">
+                <input
+                  type="password"
+                  class="form-control signin-input"
+                  id="password"
+                  placeholder="Enter your password"
+                  name="password"
+                />
+                <i
+                  class="fa-regular fa-eye-slash fa-sm toggle-password"
+                  onclick="togglePassword(event)"
+                  title="Toggle password"
+                ></i>
+                <div class="invalid-feedback mb-1" id="passwordError">*Please
+                  enter your password</div>
+              </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="LOGIN" />
+          </form>
+          <div class="para-container">
+            <a class="login-form-para text-left" href="/forgot_password">
+              <p>Forgot password?</p>
+            </a>
+            <p class="login-form-para text-right">Don't have an account?
+              <a href="/user_registration">Signup</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if isBlocked}}
+    <div id="confirmationDialog" class="">
+      <div class="dialogContent">
+        <p id="conform-message" class="text-center">Your account has been
+          blocked
+          <i class="fa-solid fa-circle-exclamation" style="color: #e20001;"></i>
+        </p>
+        <div class="buttonContainer d-flex justify-content-center">
+          <button
+            role="button"
+            class="cursor-pointer"
+            id="confirmButton"
+            onclick="history.back()"
+          >OK</button>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+</section>

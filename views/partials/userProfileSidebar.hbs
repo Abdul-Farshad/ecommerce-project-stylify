@@ -1,0 +1,48 @@
+<div class="col-md-3 d-none d-md-block" id="sidebar-col">
+  <div class="side-bar-content mt-4" id="my-ac-sidebar">
+    <ul>
+      <li id="user-profile-box">
+        <span>
+          <i class="fa-solid fa-circle-user fa-3x"></i>
+        </span>
+        <span id="user-name-box">
+          <p>Hello 👋🏻,
+            <br />
+            <strong>{{#if
+                userData
+              }}{{userData.fname}}{{else}}User{{/if}}</strong></p>
+        </span>
+      </li>
+      <li class="sideNav-item">
+        <a href="/account" class="nav-link text-decor-none">
+          <i class="fa-solid fa-lg fa-user icon"></i>
+          <span class="link">Profile Information</span>
+        </a>
+      </li>
+      <li class="sideNav-item">
+        <a href="/account/manage_address" class="nav-link text-decor-none">
+          <i class="fa-solid fa-location-dot fa-lg icon"></i>
+          <span class="link">Manage Address</span>
+        </a>
+      </li>
+      <li class="sideNav-item">
+        <a href="/account/my_orders" class="nav-link text-decor-none">
+          <i class="fa-solid fa-box-open fa-lg icon"></i>
+          <span class="link">My Orders</span>
+        </a>
+      </li>
+      <li class="sideNav-item">
+        <a href="/account/wishlist" class="nav-link text-decor-none">
+          <i class="fa-solid fa-heart fa-lg icon"></i>
+          <span class="link">My Wishlist</span>
+        </a>
+      </li>
+      <li class="sideNav-item">
+        <a href="/account/my_wallet" class="nav-link text-decor-none">
+          <i class="fa-solid fa-wallet fa-lg icon"></i>
+          <span class="link">My Wallet</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,209 @@
+{{> userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{> userProfileSidebar}}
+            <div class="col-md-9 order-details-section scrollable-column">
+                {{#if message}}
+                <p class="alert alert-success text-center p-1 mt-1" id="successMsg">{{message}}</p>
+                {{/if}}
+                <div class="p-4">
+                    <h3 class="font-weight-bold mb-4">ORDER DETAILS</h3>
+                    <div class="col-12 col-md-11">
+                        <div class="d-flex justify-content-between">
+                            {{#if order}}<p><strong>Order {{order.orderId}}</strong></p>{{/if}}
+                            {{#if products}}
+                            <div class="d-flex" style="gap: 10px;">
+                                {{#eq order.status "Pending"}}
+                                <a href="/cart/checkout?id={{order._id}}">
+                                    <button id="retry-order-btn" data-order-id="{{order.orderId}}"
+                                        class="btn text-sample">Retry Order</button>
+                                </a>
+                                <a href="/account/my_orders/order_details/cancel_order/{{order._id}}">
+                                    <button id="cancel-order-btn" data-user-id="{{order._id}}" class="text-sample"
+                                        onclick="displayConformation(this, event, 'Are you sure, Do you want to cancel this order?','/account/my_orders/order_details/cancel_order/{{order._id}}')">Cancel
+                                        Order</button>
+                                </a>
+                                {{else eq order.status "Cancelled"}}
+                                {{!-- no buttons --}}
+                                {{else eq order.status "Returned"}}
+                                {{!-- no buttons --}}
+                                {{else eq order.status "Delivered"}}
+                                {{#if returnAvailable}}
+                                <div id="order-return-container">
+                                    <select name="returnReason" id="returnReason" class="cursor-pointer d-none">
+                                        <option value="" hidden>Select a reason</option>
+                                        <option value="Wrong Size">Wrong Size</option>
+                                        <option value="Wrong Color">Wrong Color</option>
+                                        <option value="Defective Product">Defective Product</option>
+                                        <option value="Not as Described">Not as Described</option>
+                                        <option value="Received Wrong Item">Received Wrong Item</option>
+                                        <option value="Quality Issues">Quality Issues</option>
+                                    </select>
+                                    <button id="return-order-btn" onclick="showReasons()"
+                                        data-order-id="{{order.orderId}}" class="btn text-sample"
+                                        style="width: fit-content;">Return</button>
+
+                                    <button id="return-submit-btn" data-order-id="{{order.orderId}}"
+                                        class="btn text-sample d-none"
+                                        onclick="displayConformation(this, event, 'Are you sure, Do you want to return this order?','/account/my_orders/order_details/return/{{order._id}}?reason=' + document.getElementById('returnReason').value)"
+                                        style="width: fit-content;">Submit</button>
+
+                                </div>
+                                {{/if}}
+                                {{else}}
+                                <a href="/account/my_orders/order_details/cancel_order/{{order._id}}">
+                                    <button id="cancel-order-btn" data-user-id="{{order._id}}" class="text-sample"
+                                        onclick="displayConformation(this, event, 'Are you sure, Do you want to cancel this order?','/account/my_orders/order_details/cancel_order/{{order._id}}')">Cancel
+                                        Order</button>
+                                </a>
+                                {{/eq}}
+                            </div>
+                        </div>
+                        <ul class="my-3 list-unstyled">
+                            <li class="order-detail" data-product-id="{{this._id}}">
+                                <span>
+                                    <p class="heading">Order Date</p>
+                                    <p class="value text-sample">{{order.createdAt}}</p>
+                                </span>
+                                <span>
+                                    <p class="heading">Status</p>
+                                    {{#eq order.status "Shipped"}}
+                                    <p class="value text-sample text-primary">{{order.status}}</p>
+                                    {{else eq order.status "Delivered"}}
+                                    <p class="value text-sample text-success">{{order.status}}</p>
+                                    {{else eq order.status "Cancelled"}}
+                                    <p class="value text-sample text-danger">{{order.status}}</p>
+                                    {{else eq order.status "Pending"}}
+                                    <p class="value text-sample text-danger">{{order.status}}</p>
+                                    {{else}}
+                                    <p class="value text-sample">{{order.status}}</p>
+                                    {{/eq}}
+                                </span>
+                                <span>
+                                    <p class="heading">Payment Method</p>
+                                    <p class="value text-sample">{{order.paymentMethod}}</p>
+                                </span>
+                            </li>
+                            {{#each products}}
+                            <li class="cart-item order-item" data-product-id="{{this._id}}">
+                                <a href="/view/{{this._id}}" class="cart-img-box"><img src="{{firstImage this.images}}"
+                                        alt=""></a>
+                                <a href="/view/{{this._id}}" class="text-decor-none">
+                                    <p title="{{this.productId.name}}" id="pro-name">{{ this.name}}</p>
+                                </a>
+                                <span class="font-weight-bold">x{{this.quantity}}</span>
+                            </li>
+                            {{/each}}
+                        </ul>
+                        <div class="cart-summery px-4">
+                            <h5>Order Summary</h5>
+                            <hr>
+                            <div class="row cart-summery-list">
+                                <div class="col-6">Subtotal</div>
+                                <div class="col-6 text-right" id="cart-subtotal"><i
+                                        class="bx bx-rupee bx-xs"></i>{{subtotal}}
+                                </div>
+                            </div>
+                            <div class="row cart-summery-list">
+                                <div class="col-6">Shipping</div>
+                                <div class="col-6 text-right">
+                                    {{#eq order.shippingCharge 0}}
+                                    Free
+                                    {{else}}
+                                    <i class="bx bx-rupee bx-xs"></i>{{order.shippingCharge}}
+                                    {{/eq}}
+                                </div>
+                            </div>
+                            <div class="row cart-summery-list">
+                                <div class="col-6">Discount</div>
+                                <div class="col-6 text-right" id="cart-discount">-<i
+                                        class="bx bx-rupee bx-xs"></i>{{order.discount}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row cart-summery-list">
+                                <div class="col-6"><strong>Total</strong></div>
+                                <div class="col-6 text-right font-weight-bold" id="cart-total"><strong><i
+                                            class="bx bx-rupee bx-xs"></i>{{order.totalAmount}}</strong></div>
+                            </div>
+                            <hr>
+                            <div class="row cart-summery-list">
+                                <div class="col-6">Payment Method</div>
+                                <div class="col-6 text-right">{{order.paymentMethod}}</div>
+                            </div>
+                            <div class="row cart-summery-list">
+                                <div class="col-6">Payment Status</div>
+                                {{#eq order.paymentStatus "Success"}}
+                                <div class="col-6 text-right text-success">{{order.paymentStatus}}</div>
+                                {{else eq order.paymentStatus "Refunded"}}
+                                <div class="col-6 text-right text-success">{{order.paymentStatus}}</div>
+                                {{else}}
+                                <div class="col-6 text-right text-danger">{{order.paymentStatus}}</div>
+                                {{/eq}}
+                            </div>
+                        </div>
+                        <div class="address-container mt-3">
+                            <h5 class="font-weight-bold">Shipping Address</h5>
+                            <hr>
+                            <p><strong>{{order.shippingAddress.name}}</strong></p>
+                            <p>{{order.shippingAddress.city}},{{order.shippingAddress.state}}
+                                {{order.shippingAddress.PINCode}}</p>
+                            <p>{{order.shippingAddress.country}}</p>
+                            <p>Mobile number: {{order.shippingAddress.mobile}}</p>
+                            <p>{{#if order.shippingAddress.landmark}}{{order.shippingAddress.landmark}}{{/if}}</p>
+                            <p>Area or Street: {{order.shippingAddress.address}}</p>
+                        </div>
+                        {{!-- download invoice option --}}
+                        {{#eq order.status "Pending"}}
+                        {{!-- no invoice downloading option --}}
+                        {{else eq order.status "Cancelled"}}
+                        {{!-- no option --}}
+                        {{else eq order.status "Returned"}}
+                        {{!-- no option --}}
+                        {{else}}
+                        <dir class="d-flex justify-content-end">
+                            <a class="text-decor-none rounded p-2 text-sample bg-primary text-white"
+                                href="/download_invoice?id={{order._id}}">Download Invoice</a>
+                        </dir>
+                        {{/eq}}
+                        {{else}}
+                        <div class=" container p-5 text-center">
+                            <p class="mt-5 text-center text-danger">No Orders found... Order now </p>
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{!-- success message box --}}
+        <div id="successMsgBox"></div>
+    </section>
+</div>
+<div id="confirmationDialog" class="d-none">
+    <div class="dialogContent">
+        <p id="conform-message"></p>
+        <div class="buttonContainer">
+            <button id="cancelButton">Cancel</button>
+            <button id="confirmButton">Yes</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showReasons() {
+        document.getElementById("returnReason").classList.remove("d-none")
+    }
+    document.getElementById("returnReason").addEventListener("change", () => {
+        try {
+            document.getElementById("return-order-btn").classList.add("d-none")
+            document.getElementById("return-submit-btn").classList.remove("d-none")
+        } catch (err) {
+            console.error(err)
+        }
+    })
+</script>

@@ -1,0 +1,170 @@
+{{>adminSideBar}}
+<section>
+    {{#if msg}}
+    <div class="text-center">
+        <p class="alert alert-success p-1 mt-5 mb-1">{{msg}}</p>
+    </div>
+    {{/if}}
+</section>
+<section>
+    <div class="container-fluid px-5 my-3">
+        {{#if order}}
+        <div class="col-12 col-md-11">
+            <div>
+                <h3 class="font-weight-bold">ORDER</h3>
+            </div>
+            <div class="d-flex justify-content-between">
+                {{#if order}}<p><strong>Order {{order.orderId}}</strong></p>{{/if}}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Change Status
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item"
+                            href="/orders/view_order_details/changeStatus/{{order._id}}?status=Pending"
+                            data-user-id="{{order._id}}"
+                            onclick="displayConformation(this, event, 'Are you sure you want to change the order status to Pending?','/orders/view_order_details/changeStatus/{{order._id}}?status=Pending')">Pending</a>
+                        <a class="dropdown-item"
+                            href="/orders/view_order_details/changeStatus/{{order._id}}?status=Processing"
+                            data-user-id="{{order._id}}"
+                            onclick="displayConformation(this, event, 'Are you sure you want to change the order status to Processing?','/orders/view_order_details/changeStatus/{{order._id}}?status=Processing')">Processing</a>
+                        <a class="dropdown-item"
+                            href="/orders/view_order_details/changeStatus/{{order._id}}?status=Shipped"
+                            data-user-id="{{order._id}}"
+                            onclick="displayConformation(this, event, 'Are you sure you want to change the order status to Shipped?','/orders/view_order_details/changeStatus/{{order._id}}?status=Shipped')">Shipped</a>
+                        <a class="dropdown-item"
+                            href="/orders/view_order_details/changeStatus/{{order._id}}?status=Delivered"
+                            data-user-id="{{order._id}}"
+                            onclick="displayConformation(this, event, 'Are you sure you want to change the order status to Delivered?','/orders/view_order_details/changeStatus/{{order._id}}?status=Delivered')">Delivered</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"
+                            href="/orders/view_order_details/changeStatus/{{order._id}}?status=Cancelled"
+                            data-user-id="{{order._id}}"
+                            onclick="displayConformation(this, event, 'Are you sure you want to change the order status to Cancel?','/orders/view_order_details/changeStatus/{{order._id}}?status=Cancelled')">Cancel</a>
+                    </div>
+
+                </div>
+            </div>
+            <ul class="my-3 list-unstyled">
+                <li class="order-detail" data-product-id="{{this._id}}">
+                    <span>
+                        <p class="heading">Order Date</p>
+                        <p class="value text-sample">{{order.createdAt}}</p>
+                    </span>
+                    <span>
+                        <p class="heading">Status</p>
+                        {{#eq order.status "Shipped"}}
+                        <p class="value text-sample text-primary">{{order.status}}</p>
+                        {{else eq order.status "Delivered"}}
+                        <p class="value text-sample text-success">{{order.status}}</p>
+                        {{else eq order.status "Cancelled"}}
+                        <p class="value text-sample text-danger">{{order.status}}</p>
+                        {{else}}
+                        <p class="value text-sample">{{order.status}}</p>
+                        {{/eq}}
+                    </span>
+                    <span>
+                        <p class="heading">Payment Method</p>
+                        <p class="value text-sample">{{order.paymentMethod}}</p>
+                    </span>
+                    <span>
+                        <p class="heading">Payment Status</p>
+                        {{#eq order.paymentStatus "Success"}}
+                        <p class="value text-sample text-success">{{order.paymentStatus}}</p>
+                        {{else eq order.paymentStatus "Failed"}}
+                        <p class="value text-sample text-danger">{{order.paymentStatus}}</p>
+                        {{else eq order.paymentStatus "Refunded"}}
+                        <p class="value text-sample text-success">{{order.paymentStatus}}</p>
+                        {{else}}
+                        <p class="value text-sample">{{order.paymentStatus}}</p>
+                        {{/eq}}
+                    </span>
+                </li>
+                <li class="d-flex justify-content-around font-weight-bold mt-2 ">
+                    <span>Image</span>
+                    <span>Name</span>
+                    <span>Quantity</span>
+
+                </li>
+                {{#each products}}
+                <li class="cart-item order-item" data-product-id="{{this._id}}">
+                    <a href="/view/{{this._id}}" class="cart-img-box"><img src="{{firstImage this.images}}" alt=""></a>
+                    <a href="/view/{{this._id}}" class="text-decor-none">
+                        <p title="{{this.productId.name}}" id="pro-name">{{ this.name}}</p>
+                    </a>
+                    <span class="font-weight-bold">x{{this.quantity}}</span>
+                </li>
+                {{/each}}
+            </ul>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="address-container mt-3">
+                        <h5 class="font-weight-bold">Shipping Address</h5>
+                        <hr>
+                        <p><strong>{{order.shippingAddress.name}}</strong></p>
+                        <p>{{order.shippingAddress.city}},{{order.shippingAddress.state}}
+                            {{order.shippingAddress.PINCode}}</p>
+                        <p>{{order.shippingAddress.country}}</p>
+                        <p>Mobile number: {{order.shippingAddress.mobile}}</p>
+                        <p>{{#if order.shippingAddress.landmark}}{{order.shippingAddress.landmark}}{{/if}}</p>
+                        <p>Area or Street: {{order.shippingAddress.address}}</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="cart-summery px-4">
+                        <h5>Order Summary</h5>
+                        <hr>
+                        <div class="row cart-summery-list">
+                            <div class="col-6">Subtotal</div>
+                            <div class="col-6 text-right" id="cart-subtotal"><i
+                                    class="bx bx-rupee bx-xs"></i>{{subtotal}}
+                            </div>
+                        </div>
+                        <div class="row cart-summery-list">
+                            <div class="col-6">Shipping</div>
+                            <div class="col-6 text-right">
+                                {{#eq order.shippingCharge 0}}
+                                Free
+                                {{else}}
+                                <i class="bx bx-rupee bx-xs"></i>{{order.shippingCharge}}
+                                {{/eq}}
+                            </div>
+                        </div>
+                        <div class="row cart-summery-list">
+                            <div class="col-6">Discount</div>
+                            <div class="col-6 text-right" id="cart-discount">-<i
+                                    class="bx bx-rupee bx-xs"></i>{{order.discount}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row cart-summery-list">
+                            <div class="col-6"><strong>Total</strong></div>
+                            <div class="col-6 text-right font-weight-bold" id="cart-total"><strong><i
+                                        class="bx bx-rupee bx-xs"></i>{{order.totalAmount}}</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class=" container p-5 text-center">
+                <p class="mt-5 text-center">No Orders found...</p>
+            </div>
+            {{/if}}
+        </div>
+
+        <div id="confirmationDialog" class="d-none">
+            <div class="dialogContent">
+                <p id="conform-message"></p>
+                <div class="buttonContainer">
+                    <button id="cancelButton">Cancel</button>
+                    <button id="confirmButton">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{!-- success message box --}}
+<div id="successMsgBox">
+
+</div>

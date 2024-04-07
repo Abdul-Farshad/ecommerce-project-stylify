@@ -1,0 +1,44 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 my-auto">
+                
+                <img class="login-img" src="/images/admin-login-img.svg" alt="">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 my-auto">
+
+                <div class="form-container">
+                    <h2 class="mb-4 login-header">LOGIN</h2>
+                    {{#if error}}
+                    <p class="alert alert-danger p-0 text-center">{{error}}</p>
+                    {{/if}}
+                    <form action="/admin_login" method="post" id="admin-signin-form">
+                        <div class="form-group">
+                            <div><label for="username">User name</label></div>
+                            <input type="text" class="form-control signin-input" id="username" placeholder="Enter your username" name="username" >
+                            <div class="invalid-feedback">
+                            *Please enter your username
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div><label for="password">Password</label></div>
+                            <div class="password-container">
+                                <input type="password" id="password" class="form-control signin-input" placeholder="Enter your password" name="password">
+                                <i class="fa-regular fa-eye-slash fa-sm toggle-password" onclick="togglePassword()" title="Toggle password"></i>
+                                <div class="invalid-feedback">
+                                    lease enter your password
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="LOGIN">
+                    </form>
+                    <div class="para-container">
+                        <a class="login-form-para text-left" href="#"><p>Forgot password?</p></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,57 @@
+{{>adminSideBar}}
+
+<div class="container-fluid px-5 my-3">
+    <h3 class="font-weight-bold">Edit Category</h3>
+    <p class="admin-blueText text-sample">Use the form to edit Category</p>
+    <div class="row ">
+        <div class="col-12 col-md-6 border border-secondary  rounded p-3">
+            <h6 class="mb-3 font-weight-bold">General Information</h6>
+
+            <form action="" method="post" id="Add-category-form">
+                <div class="form-group">
+                    <label class="text-sample text-secondary">Category Name</label>
+                    <input class="rounded border border-secondary" id="category-name" type="text"
+                        placeholder="Type category name here" {{#if category}}value="{{category.name}}" {{/if}}>
+                    <p class="text-sample text-danger p-0" id="nameError">{{#if errMsg}}{{this}}{{/if}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample text-secondary">Description</label>
+                    <textarea class="form-control border border-secondary" id="description" rows="3">{{#if category}}{{category.description}}{{/if}}</textarea>
+                    <p class="text-sample text-danger p-0" id="descriptionError"></p>
+                </div>
+                {{!-- this input field using for indicate the form data for edit , then set form action based on that --}}
+                <input type="hidden" id="formAction" name="formAction" value="edit" data-category-id="{{category._id}}">
+                <div class="form-group mb-0">
+                    <input type="submit" value="Save" class="btn border-0 font-weight-bold">
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-6 p-3">
+
+            <h6 class="mb-3 font-weight-bold">Thumbnail</h6>
+            <form>
+                <label class="custom-file-upload" for="imageUpload">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Image
+                </label>
+                <input class="d-none is-invalid" type="file" id="imageUpload" name="imageUpload" accept="image/*">
+                <p class="text-sample text-danger p-0 d-none" id="imageUploadError">*Please upload a thumbnail image</p>
+            </form enctype="multipart/form-data">
+            <div id="imagePreview" class="image-preview category-pre-img">
+                <img src="{{category.image}}" alt="category img" style="max-width: 100%; max-height: 100%">
+                <i class="fa-solid fa-circle-xmark " id="cancel-icon" style="color: #e20001;" title="Cancel"></i>
+            </div>
+        </div>
+    </div>
+    <div id="confirmationDialog" class="d-none">
+        <div class="dialogContent">
+            <p id="conform-message"></p>
+            <div class="buttonContainer">
+                <button id="cancelButton">Cancel</button>
+                <button id="confirmButton">Yes</button>
+            </div>
+        </div>
+    </div>
+    {{!-- category adding success message para --}}
+    {{!-- <p class="alert alert-success p-1 mt-5 mb-1 text-center" id="category-msg"></p> --}}
+
+</div>

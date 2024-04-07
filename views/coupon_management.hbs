@@ -1,0 +1,124 @@
+{{>adminSideBar}}
+
+<div class="container-fluid px-5 my-3">
+    <h3 class="font-weight-bold">Create Coupon</h3>
+    <p class="admin-blueText text-sample">Use the form to create new coupon</p>
+    <div class="row ">
+        <div class="col-12 col-md-6 border border-secondary  rounded p-3">
+
+            <form action="/coupon/create_coupon" method="post" id="Add-coupon-form">
+                <div class="form-group">
+                    <label class="text-sample ">Minimum Purchase Amount</label>
+                    <input class="rounded border border-secondary" id="coupon-min-amount" type="text" maxlength="6"
+                        placeholder="Type minimum amount here" value="0">
+                    <p class="text-sample3 text-danger p-0" id="minAmountError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample ">Discount Percentage</label>
+                    <div class="input-group">
+                        <input class="form-control rounded border border-secondary" id="coupon-dis" type="number"
+                            placeholder="Enter discount %">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <p class="text-sample3 text-danger p-0" id="discountError"></p>
+                </div>
+                <div class="form-group">
+                    <label class="text-sample ">Expiration Date</label>
+                    <input class="rounded border border-secondary" id="coupon-expDate" type="date">
+                    <p class="text-sample3 text-danger p-0" id="expDateError"></p>
+                </div>
+                <div class="form-group mb-0">
+                    <input type="submit" value="Create Coupon" class="btn border-0 font-weight-bold">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="container-fluid my-5">
+            <h3 class="font-weight-bold mb-3">All Coupons</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="coupon-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col"># Coupon Code</th>
+                            <th scope="col">Minimum Purchase Amount</th>
+                            <th scope="col">Discount(%)</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Expiration Date</th>
+                            <th scope="col">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each coupons}}
+                        <tr>
+                            <td>{{this.couponCode}}</td>
+                            <td><i class="bx bx-rupee bx-xs"></i>{{this.minimumPurchaseAmount}}</td>
+                            <td>{{this.discountPercentage}}% off</td>
+                            <td>{{this.createdAt}}</td>
+                            <td>{{this.expirationDate}}</td>
+                            <td class="action-cell">
+                                <ul class="list-unstyled d-flex justify-content-around">
+                                    <li>
+                                        <a href="/coupon/deleteCoupon/{{this._id}}">
+                                            <i class="fa-solid fa-trash-can fa-lg" style="color: #c80000;"
+                                                title="Delete" data-user-id="{{this._id}}"
+                                                onclick="displayConformation(this, event, 'Are you sure, Do you want to delete this ({{this.couponCode}}) coupon?','/coupon/deleteCoupon/{{this._id}}')"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{#unless coupons}}
+            <div class=" container p-5 text-center" id="empty-data-msg">
+                <p class="mt-5 text-center text-danger">No Coupon found...create new one </p>
+                <i class="fa-solid fa-arrow-up"></i>
+            </div>
+            {{/unless}}
+        </div>
+    </div>
+    <div id="confirmationDialog" class="d-none">
+        <div class="dialogContent">
+            <p id="conform-message"></p>
+            <div class="buttonContainer">
+                <button id="cancelButton">Cancel</button>
+                <button id="confirmButton">Yes</button>
+            </div>
+        </div>
+    </div>
+    {{#if pages}}
+    <nav aria-label="Page navigation" id="pagination" class=" p-3">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled" id="prevPageBtn">
+                <a class="page-link" id="prev-link" href="" tabindex="-1" aria-disabled="true"><i
+                        class="fa-solid fa-angle-left"></i></a>
+            </li>
+            {{#each pages}}
+            <li class="page-item page-number mx-1" aria-current="page">
+                <a class="page-link " href="?page={{this}}">{{this}}</a>
+            </li>
+            {{/each}}
+            <li class="page-item" id="nextBtn">
+                <a class="page-link" id="next-link" href=""><i class="fa-solid fa-angle-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+    {{/if}}
+</div>
+
+{{!-- success message box --}}
+<div id="successMsgBox"></div>
+
+{{#if couponDeleted}}
+    <script src="/javascripts/index.js"></script>
+    <script>
+        showSuccessMsg("Coupon deleted successfully!");
+    </script>
+{{/if}}

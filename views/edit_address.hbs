@@ -1,0 +1,164 @@
+{{>userNavbar}}
+
+<div class="container-fluid">
+    <section class="content-section">
+        <i class="fa-solid fa-bars fa-lg main-menu-icon d-md-none" onclick="toggleSidebar()"></i>
+        <div class="row">
+            {{>userProfileSidebar}}
+            <div class="col-md-9">
+                <div class="p-4">
+                    <h3 class="font-weight-bold mb-4">EDIT ADDRESS</h3>
+                    <form action="/account/manage_address/edit_address/{{existingAddress._id}}" method="patch" id="addressForm"
+                        name="addressForm">
+                        <div class="form-group">
+                            <label>Full name</label>
+                            <input type="text" class="form-control address-input" id="fname" name="fname"
+                                placeholder="First name and last name" maxlength="50" {{#if
+                                existingAddress}}value="{{existingAddress.name}}" {{/if}}>
+                            <div class="invalid-feedback" id="fnameError">
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <select class="select form-control address-input border-1 border-dark"
+                                        name="country" id="country">
+                                        <option value="">Select</option>
+                                        {{#if existingAddress.country}}
+                                        <option value="{{existingAddress.country}}" selected>{{existingAddress.country}}</option>
+                                        {{/if}}
+                                    </select>
+                                    <div class="invalid-feedback" id="countryError">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>State</label>
+                                    <select class="select form-control address-input border-1 border-dark" name="state" id="state">
+                                        {{#if existingAddress.state}}
+                                        <option value="{{existingAddress.state}}" selected>{{existingAddress.state}}</option>
+                                        {{/if}}
+                                        <option value="Andhra Pradesh" >Andhra Pradesh</option>
+                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                        <option value="Assam">Assam</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                        <option value="Goa">Goa</option>
+                                        <option value="Gujarat">Gujarat</option>
+                                        <option value="Haryana">Haryana</option>
+                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Kerala">Kerala</option>
+                                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Manipur">Manipur</option>
+                                        <option value="Meghalaya">Meghalaya</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="stateError">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>District</label>
+                                    <select class="select form-control address-input border-1 border-dark"
+                                        name="district" id="district">
+                                        {{#if existingAddress.district}}
+                                        <option value="{{existingAddress.district}}" selected>{{existingAddress.district}}</option>
+                                        {{/if}}
+                                        <option value="Alappuzha">Alappuzha</option>
+                                        <option value="Ernakulam">Ernakulam</option>
+                                        <option value="Idukki">Idukki</option>
+                                        <option value="Kannur">Kannur</option>
+                                        <option value="Kasaragod">Kasaragod</option>
+                                        <option value="Kollam">Kollam</option>
+                                        <option value="Kottayam">Kottayam</option>
+                                        <option value="Kozhikode">Kozhikode</option>
+                                        <option value="Malappuram">Malappuram</option>
+                                        <option value="Palakkad">Palakkad</option>
+                                        <option value="Pathanamthitta">Pathanamthitta</option>
+                                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                        <option value="Thrissur">Thrissur</option>
+                                        <option value="Wayanad">Wayanad</option>
+                                    </select>
+                                    <div class="invalid-feedback" id="districtError">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>PIN code</label>
+                                    <input type="text" class="form-control address-input" id="PINCode" name="PINCode"
+                                        maxlength="6" placeholder="6 digits[0-9] PIN code" {{#if existingAddress}}value ="{{existingAddress.PINCode}}"{{/if}}>
+                                    <div class="invalid-feedback" id="PINCodeError">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Mobile number</label>
+                                    <input type="text" class="form-control address-input" id="mobile" name="mobile"
+                                        maxlength="10" placeholder="Enter 10-digit mobile number" {{#if existingAddress}}value ="{{existingAddress.mobile}}"{{/if}}>
+                                    <div class="invalid-feedback" id="mobileError">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Town/City</label>
+                                    <input type="text" class="form-control address-input" id="city" name="city"
+                                        maxlength="50" {{#if existingAddress}}value ="{{existingAddress.city}}"{{/if}}>
+                                    <div class="invalid-feedback" id="cityError">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Landmark (Optional)</label>
+                                    <input type="text" class="form-control" id="landmark" name="landmark"
+                                        placeholder="E.g. near city hospital" maxlength="60" {{#if existingAddress.landmark}}value ="{{existingAddress.landmark}}"{{/if}}>
+                                    <div class="invalid-feedback" id="landmarkError">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address(Area and street)</label>
+                            <textarea class="form-control address-input border border-dark select" id="address" rows="3"
+                                name="address" placeholder="Type here..." maxlength="100">{{#if existingAddress}}{{existingAddress.address}}{{/if}}</textarea>
+                            <div class="invalid-feedback" id="addressError"></div>
+                        </div>
+                        <input type="hidden" value="edit" id="form-purpose" data-address-id="{{existingAddress._id}}">
+                        <button type="submit" class="btn btn-primary mt-3">ADD ADDRESS</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+{{#if errorMsg}}
+<div id="confirmationDialog" class="">
+    <div class="dialogContent">
+        <p id="conform-message" class="text-center">{{errorMsg}} <i class="fa-solid fa-circle-exclamation"
+                style="color: #e20001;"></i></p>
+        <div class="buttonContainer d-flex justify-content-center">
+            <button role="button" class="cursor-pointer" id="confirmButton" onclick="history.back()">OK</button>
+        </div>
+    </div>
+</div>
+{{/if}}
+</section>
+</div>

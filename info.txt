@@ -1,0 +1,4 @@
+
+user sign in page url :- http://localhost:3000/user_signin
+
+admin sign in url :- http://localhost:3000/admin_signin
