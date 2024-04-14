@@ -72,13 +72,11 @@ const getAdminDashboard = async (req, res) => {
       },
     ]);
 
-    console.log("sales", sales);
     let totalSales = 0;
     if (sales.length !== 0) {
       // formate the amount
       totalSales = formateAmount(sales[0].totalAmount);
     }
-    console.log("totalSales", totalSales);
     // check products
     const products = await Product.find({ isActive: true, stock: { $gt: 0 } });
     const productCount = products.length;

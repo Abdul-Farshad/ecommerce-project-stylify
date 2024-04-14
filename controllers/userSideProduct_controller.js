@@ -7,7 +7,7 @@ const getHomePage = async (req, res) => {
 
   const page = req.query.page || 1;
   const limit = 12;
-  const query = { isActive: true };
+  const query = { status: "Active" };
 
   // filtering
   if (req.query.category) {

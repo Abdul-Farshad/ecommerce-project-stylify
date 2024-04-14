@@ -22,11 +22,11 @@ const viewCart = async (req, res) => {
     const cartItems = await Cart.find({ userId }).populate("productId");
     const subtotal = cartItems.reduce(
       (acc, item) => acc + item.productId.price * item.quantity,
-      0,
+      0
     );
     const discount = cartItems.reduce(
       (acc, item) => acc + item.productId.discount * item.quantity,
-      0,
+      0
     );
     let total = subtotal - discount;
     if (total < 1000) {
@@ -130,7 +130,7 @@ const updateQty = async (req, res) => {
     if (cartItemId) {
       const cartItem = await Cart.findById(cartItemId).populate(
         "productId",
-        "stock",
+        "stock"
       );
       if (cartItem) {
         if (cartItem.productId.stock <= newQty - 1) {
@@ -186,7 +186,7 @@ const getCheckoutPage = async (req, res) => {
           totalAmount: 1,
           appliedCoupon: 1,
           shippingCharge: 1,
-        },
+        }
       );
       if (!order) {
         throw new Error("couldn't find existing order with received order_id");
@@ -205,14 +205,21 @@ const getCheckoutPage = async (req, res) => {
       }
     } else {
       const cartItems = await Cart.find({ userId }).populate("productId");
-
+      cartItems.forEach((item) => {
+        if (item.productId.status === "Deleted") {
+          console.log(item);
+          return res.redirect(
+            `/cart?msg=Sorry, the product '${item.productId.name}' is currently not available. Please remove it from your cart to proceed.`
+          );
+        }
+      });
       subtotal = cartItems.reduce(
         (acc, item) => acc + item.productId.price * item.quantity,
-        0,
+        0
       );
       discount = cartItems.reduce(
         (acc, item) => acc + item.productId.discount * item.quantity,
-        0,
+        0
       );
       total = subtotal - discount;
       if (total < 1000) {
@@ -261,7 +268,7 @@ const getCoupons = async (req, res) => {
             ...coupon.toObject(),
             expirationDate: await formatDate(coupon.expirationDate),
           });
-        }),
+        })
       );
       return res.status(200).json(formattedCoupons);
     }
@@ -275,9 +282,8 @@ const getCoupons = async (req, res) => {
 const placeOrder = async (req, res) => {
   try {
     console.log("reached at order placing route");
-    const {
-      addressId, paymentMethod, discount, totalAmount, couponCode,
-    } = req.body;
+    const { addressId, paymentMethod, discount, totalAmount, couponCode } =
+      req.body;
     const { existingOrderId } = req.body || null;
     const userId = req.session.user_id;
     if (!userId) {
@@ -286,7 +292,7 @@ const placeOrder = async (req, res) => {
     const address = await Address.findById(addressId);
     if (!address) {
       throw new Error(
-        "couldn't find a address in database with received address id",
+        "couldn't find a address in database with received address id"
       );
     }
     // check is it retry order or not
@@ -355,7 +361,7 @@ const placeOrder = async (req, res) => {
             quantity: item.quantity,
             price: product.price,
           };
-        }),
+        })
       );
 
       if (couponCode !== "") {
@@ -366,7 +372,9 @@ const placeOrder = async (req, res) => {
           // coupon.redeemed = true;
           await coupon.save();
         } else if (!coupon) {
-          res.status(400).json({ error: "Sorry, the coupon you applied is no longer valid." });
+          res.status(400).json({
+            error: "Sorry, the coupon you applied is no longer valid.",
+          });
         }
       }
       // Generate order number
@@ -428,9 +436,7 @@ const placeOrder = async (req, res) => {
 // update payment status after razorpay payment success
 const updatePaymentStatus = async (req, res) => {
   try {
-    const {
-      orderId, paymentId, status, changedOrderData,
-    } = req.body;
+    const { orderId, paymentId, status, changedOrderData } = req.body;
     if (!paymentId || !status || !orderId) {
       return res
         .status(400)
@@ -448,7 +454,9 @@ const updatePaymentStatus = async (req, res) => {
     if (changedOrderData) {
       const address = await Address.findById(changedOrderData.addressId);
       if (!address) {
-        throw new Error("couldn't find a address in database with give address ID");
+        throw new Error(
+          "couldn't find a address in database with give address ID"
+        );
       }
       console.log("changed order data", changedOrderData);
       order.shippingAddress = address;
@@ -484,7 +492,7 @@ async function updateStock(order) {
       await Product.findByIdAndUpdate(proId, {
         $inc: { stock: -quantity },
       });
-    }),
+    })
   );
 }
 module.exports = {

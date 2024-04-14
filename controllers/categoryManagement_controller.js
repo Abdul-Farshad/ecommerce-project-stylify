@@ -1,4 +1,5 @@
 const multer = require("multer");
+const Product = require("../models/product");
 const Category = require("../models/category");
 // eslint-disable-next-line import/no-extraneous-dependencies
 
@@ -39,7 +40,6 @@ const addCategory = async (req, res) => {
         description: req.body.description ? req.body.description : null,
         image: req.file ? imagePath : null,
       };
-      console.log(formData.image);
       // check existing category
       const existingCategory = await Category.findOne({ name: formData.name });
       if (existingCategory) {
@@ -64,12 +64,10 @@ const addCategory = async (req, res) => {
 // Get Edit category page
 const getEditCategory = async (req, res) => {
   try {
-    console.log("inside get edit category router");
     if (req.params.id) {
       const categoryId = req.params.id;
       const category = await Category.findOne({ _id: categoryId });
       if (category) {
-        console.log("category for edit:", category);
         res.render("edit_category", { title: "Edit Category", category });
       } else {
         throw new Error(
@@ -88,21 +86,15 @@ const getEditCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    console.log("form data received from front end:", req.body);
     const categoryId = req.params.id;
-    console.log("this is category id for update:", categoryId);
     const { name, description } = req.body;
-    console.log("this is category name for update:", name);
-    console.log("this is category description for update:", description);
     const { file } = req;
     if (name && categoryId) {
       let imagePath = null;
       if (file) {
-        console.log(file.path);
         imagePath = req.file.path.replace(/public\\/, "/");
         console.log(imagePath);
       }
-
       const existingCategory = await Category.findById(categoryId);
       if (!existingCategory) {
         throw new Error("couldn't find existing category for editing");
@@ -121,10 +113,7 @@ const updateCategory = async (req, res) => {
         description: description || null,
         image: updatedImage,
       };
-      console.log(updatedData.image);
-
       // Update existing Category
-      console.log("updating category in database");
       const updatedCategory = await Category.findOneAndUpdate(
         {
           _id: categoryId,
@@ -133,7 +122,6 @@ const updateCategory = async (req, res) => {
         { new: true }
       );
 
-      console.log("Category updated successfully");
       return res.status(200).json({
         message: "Category updated successfully",
         category: updatedCategory,
@@ -149,16 +137,25 @@ const updateCategory = async (req, res) => {
 // delete category
 const deleteCategory = async (req, res) => {
   try {
-    console.log("deleting a category");
     if (req.params.id) {
       const categoryId = req.params.id;
       const category = await Category.find({ _id: categoryId });
-      if (category) {
-        console.log(category);
-        await Category.deleteOne({ _id: categoryId });
-        return res.redirect("/category");
+      if (!category) {
+        throw new Error("Category not found in database for deleting");
       }
-      throw new Error("Category not found in database for deleting");
+      const productsWithCategory = await Product.findOne({
+        category: categoryId,
+      });
+      console.log("pro with this cate", productsWithCategory);
+      if (productsWithCategory) {
+        console.log("inside if")
+        return res.redirect(
+          "/category?msg=Cannot delete category. Products are associated with this category."
+        );
+      }
+      console.log("out side of if")
+      await Category.deleteOne({ _id: categoryId });
+      return res.redirect("/category");
     }
   } catch (err) {
     console.error("category deleting error:", err);

@@ -634,7 +634,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(response);
             const data = await response.json();
             console.log(data);
-            showSuccessMsg(data.message)
+            showSuccessMsg(data.message);
             window.location.reload();
           } else {
             const responseData = await response.json(); // If server returns error details
@@ -1203,12 +1203,18 @@ function updateDiscountAmount(
 // Check if there is a success message in the URL and display message
 const urlParams = new URLSearchParams(window.location.search);
 const successMessage = urlParams.get("success");
-
+const msg = urlParams.get("msg");
 // Display the success message if it exists
 if (successMessage) {
   showSuccessMsg(successMessage);
   // Remove the "success" query string from the URL
   urlParams.delete("success");
+  const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+  window.history.replaceState({}, document.title, newUrl);
+} else if (msg) {
+  showSuccessMsg(msg, false);
+  // Remove the "success" query string from the URL
+  urlParams.delete("msg");
   const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
   window.history.replaceState({}, document.title, newUrl);
 }

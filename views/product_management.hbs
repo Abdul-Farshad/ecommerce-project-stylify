@@ -36,11 +36,13 @@
               {{else}}
               <td>{{this.stock}}</td>
               {{/eq}}
-              {{#if this.isActive}}
+              {{#eq this.status "Active"}}
               <td class="text-center  alert-success p-0" >Active</td>
-              {{else}}
+              {{else eq this.status "Inactive"}}
               <td class="text-center  alert-danger p-0">Inactive</td>
-              {{/if}}
+              {{else eq this.status "Deleted"}}
+              <td class="text-center  alert-danger p-0">Deleted</td>
+              {{/eq}}
               <td class="action-cell">
                 <ul class="list-unstyled d-flex justify-content-around ">
                   <li>

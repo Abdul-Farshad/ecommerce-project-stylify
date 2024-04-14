@@ -7,12 +7,12 @@ const getProductManagement = async (req, res) => {
   try {
     const page = req.query.page || 1;
     const limit = 5;
-    const products = await Product.find()
+    const products = await Product.find({ status: { $ne: "Deleted" } })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
-    const count = await Product.countDocuments();
+    const count = await Product.countDocuments({ status: { $ne: "Deleted" } });
     const pages = [];
     const totalPage = Math.ceil(count / limit);
     // eslint-disable-next-line no-plusplus
@@ -20,7 +20,6 @@ const getProductManagement = async (req, res) => {
       pages.push(i);
     }
     const dpImages = products.map((product) => product.images[0]);
-
     res.render("product_management", {
       title: "Product management",
       products,
@@ -77,7 +76,10 @@ const addProduct = async (req, res) => {
     };
 
     // Check for existing product
-    const existingProduct = await Product.findOne({ name: data.name });
+    const existingProduct = await Product.findOne({
+      name: data.name,
+      status: { $ne: "Deleted" },
+    });
     if (existingProduct) {
       console.log("Product already exists with this name");
       return res.status(400).json({ error: "Product already exists" });
@@ -123,7 +125,6 @@ const getEditProduct = async (req, res) => {
 
 // Delete existing product image
 const deleteProductImage = async (req, res) => {
-  console.log("reached delete product image route");
   const { productId, imageIndex } = req.params;
   try {
     if (!productId) {
@@ -132,8 +133,6 @@ const deleteProductImage = async (req, res) => {
     if (!imageIndex) {
       return res.status(404).json({ error: "couldn't find image index" });
     }
-    console.log("pro Id ", productId);
-    console.log("img index", imageIndex);
     const product = await Product.findById(productId);
 
     if (!product) {
@@ -143,7 +142,6 @@ const deleteProductImage = async (req, res) => {
     // Remove the image at the specified index from the images array
     product.images.splice(imageIndex, 1);
     await product.save();
-    console.log("success");
     return res.status(200).json({ message: "Image deleted successfully" });
   } catch (err) {
     console.error("existing product image deletion error: ", err);
@@ -153,10 +151,6 @@ const deleteProductImage = async (req, res) => {
 // Update product after edit product details
 const editProduct = async (req, res) => {
   try {
-    console.log("reached at product update router");
-    console.log("forData", req.body);
-    console.log(req.files);
-
     const proId = req.params.id;
     const formData = JSON.parse(req.body.formData);
 
@@ -184,7 +178,6 @@ const editProduct = async (req, res) => {
       discount: discountAmount,
       stock,
     };
-    console.log("this is the data for update ", updatedData);
 
     const existingProduct = await Product.findById({ _id: proId });
     if (existingProduct) {
@@ -219,8 +212,7 @@ const softDelete = async (req, res) => {
       throw new Error("product not found in database for soft delete");
     }
     // toggle the status
-    product.isActive = !product.isActive;
-    console.log(product.isActive);
+    product.status = product.status === "Active" ? "Inactive" : "Active";
     await product.save();
     res.redirect("/product_management");
   } catch (err) {
@@ -231,17 +223,15 @@ const softDelete = async (req, res) => {
 // eslint-disable-next-line consistent-return
 const deleteProduct = async (req, res) => {
   try {
-    console.log("deleting a product");
-    console.log(req.params.id);
     if (req.params.id) {
       const productId = req.params.id;
 
       const product = await Product.findOne({ _id: productId });
       if (product) {
-        console.log(product);
-
         // Delete the product
-        await Product.deleteOne({ _id: productId });
+        product.status = "Deleted";
+        await product.save();
+        // await Product.deleteOne({ _id: productId });
 
         console.log("product deleted");
         return res.redirect("/product_management");
