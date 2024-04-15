@@ -6,7 +6,7 @@ function connectDatabase(url) {
   mongoose
     .connect(url)
     .then(() => console.log("database connected"))
-    .catch((err) => console.error(err));
+    .catch((err) => console.error("Database connection error:", err));
 }
 
 module.exports = connectDatabase;
