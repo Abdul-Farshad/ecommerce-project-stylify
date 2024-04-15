@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
+require("dotenv").config();
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -75,7 +76,7 @@ app.use(
       autoRemove: "interval", // Automatically remove expired sessions (default is 'native')
       autoRemoveInterval: 10, // Interval in minutes to clear expired sessions (default is 10)
     }),
-  })
+  }),
 );
 
 app.use(cartItemQtyCheck);
