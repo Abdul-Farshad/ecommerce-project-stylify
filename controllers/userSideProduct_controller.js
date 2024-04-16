@@ -81,13 +81,14 @@ const productView = async (req, res) => {
       throw new Error("couldn't find productId in params");
     } else if (!product) {
       throw new Error(
-        "couldn't find a product in database with received product Id",
+        "couldn't find a product in database with received product Id"
       );
     }
     // calculate discount % based on regular price and selling price
     const { regularPrice } = product;
     const sellingPrice = product.price;
-    const discountPercentage = ((regularPrice - sellingPrice) / regularPrice) * 100;
+    const discountPercentage =
+      ((regularPrice - sellingPrice) / regularPrice) * 100;
 
     // check product exist in wishlist
     const checkInWishlist = await Wishlist.exists({
@@ -111,7 +112,6 @@ const productView = async (req, res) => {
 // Product search
 const productSearch = async (req, res) => {
   try {
-    console.log("reached product search route");
     const searchWord = req.query.search;
     if (searchWord) {
       let products = await Product.aggregate([
@@ -131,9 +131,12 @@ const productSearch = async (req, res) => {
             ],
           },
         },
+        {
+          $match: { status: "Active" },
+        },
       ]);
       if (!products || products.length === 0) {
-        products = await Product.find();
+        products = await Product.find({ status: "Active" });
       }
 
       const categories = await Category.find();
@@ -174,7 +177,7 @@ const wishlistManage = async (req, res) => {
     const wishlistItem = await Wishlist.findOneAndUpdate(
       { userId, "product.productId": productId },
       { $pull: { product: { productId } } },
-      { new: true },
+      { new: true }
     );
 
     if (wishlistItem) {
@@ -189,7 +192,7 @@ const wishlistManage = async (req, res) => {
       Wishlist.findOneAndUpdate(
         { userId },
         { $push: { product: { productId } } },
-        { upsert: true, new: true },
+        { upsert: true, new: true }
       )
         .then(() => {
           console.log("new product added to wishlist");
