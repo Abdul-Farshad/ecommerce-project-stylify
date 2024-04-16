@@ -455,7 +455,7 @@ body {
 
 .card {
   width: 100% !important;
-  height: 450px;
+  /* height: 450px; */
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -466,7 +466,7 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 .card-img {
-  height: 280px;
+  /* height: 200px; */
 }
 .card-body {
   white-space: nowrap;
@@ -1492,6 +1492,10 @@ nav a {
 
 /* phone size */
 @media (max-width: 575.98px) {
+  /* home page */
+  .sort-dropdown-div button {
+    font-size: 11px;
+  }
   /* buy now and add to cart btn */
   .buyNow-btn-section {
     display: flex;
