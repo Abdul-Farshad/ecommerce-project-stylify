@@ -1046,7 +1046,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (res.status === 401) {
               return res.json().then((data) => {
                 console.log(data);
-                window.location.href = data.redirectTo;
+                window.location.href = data.redirect;
               });
             }
             return res.json();

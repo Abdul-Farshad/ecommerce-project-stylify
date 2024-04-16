@@ -105,7 +105,7 @@ const productView = async (req, res) => {
       discountPercentage: discountPercentage.toFixed(0),
     });
   } catch (err) {
-    console.error("Product details page rendering error");
+    console.error("Product details page rendering error", err);
   }
 };
 
