@@ -530,7 +530,7 @@ body {
 #sub-img-set {
   display: flex;
   flex-direction: column;
-  overflow-x: auto;
+  overflow-y: auto;
   gap: 5px;
   align-items: center;
   padding: 5px 10px;
@@ -1496,7 +1496,7 @@ nav a {
   .sort-dropdown-div button {
     font-size: 11px;
   }
-  /* buy now and add to cart btn */
+  /* add to cart btn */
   .buyNow-btn-section {
     display: flex;
     flex-direction: column;

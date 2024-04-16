@@ -52,7 +52,8 @@
                         {{else}}
                         <div class="text-sample text-secondary ">
                             <p class="mb-0">M.R.P ₹<span id="reg-price">{{#if
-                                    product.regularPrice}}{{product.regularPrice}}{{/if}}</span> ({{discountPercentage}}% off)</p>
+                                    product.regularPrice}}{{product.regularPrice}}{{/if}}</span>
+                                ({{discountPercentage}}% off)</p>
                         </div>
                         {{/eq}}
                         <p class="text-sample mb-0">Inclusive of all taxes</p>
@@ -95,3 +96,13 @@
     {{!-- success message box --}}
     <div id="successMsgBox"></div>
 </section>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+    const mainImg = document.getElementById('main-img');
+    const subImgSet = document.getElementById('sub-img-set');
+
+    // Set the height of sub-img-set to match the height of main-img-div
+    subImgSet.style.height = mainImg.clientHeight + 'px';
+    });
+</script>
