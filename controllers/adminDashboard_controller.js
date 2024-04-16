@@ -78,7 +78,7 @@ const getAdminDashboard = async (req, res) => {
       totalSales = formateAmount(sales[0].totalAmount);
     }
     // check products
-    const products = await Product.find({ isActive: true, stock: { $gt: 0 } });
+    const products = await Product.find({ status: "Active", stock: { $gt: 0 } });
     const productCount = products.length;
 
     // check number of customers
